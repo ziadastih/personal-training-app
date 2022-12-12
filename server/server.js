@@ -56,7 +56,7 @@ server.use(bodyParser.json({ limit: "50mb" }));
 server.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 server.use(cookieParser());
-server.use(express.static("./public/HOME-FILES"));
+server.use(express.static("../client/public"));
 server.use(express.json());
 
 server.use("/api/v1/auth", authRoute);

@@ -1,0 +1,31 @@
+Frontend:
+
+A__pages:                               Routes:
+
+general:    1_Homepage                 "/" ,"/login","/register","/features" 
+
+coach:      2_coachHomepage            "/coachHomepage/:coachId"
+            3_Clients                  "/clients/:coachId"
+            4_Programs                 "/programs/:coachId"
+            5_Nutrition                "/diets/:coachId"
+            6_activities               "/activities/:coachId"
+            7_create program           "/createPrograms/:coachId"
+            8_create Diet              "/createDiet/:coachId"
+            9_manage client            "/manageClient/:clientId"
+            10_manage client program   "/managePrograms/:clientId"
+            11_manage client nutrition "/manageDiets/:clientId"
+            12_manage client check In  "/manageCheckIn/:clientId"
+            13_check clients logbook    "manageLogBook/:clientId"
+            14_coach settings            "coachSettings/:coachId"
+            15_Edit program               "EditProgram/:programId
+            16_Edit Diet                 "editDiet/:dietId"
+
+
+client:     2_clientHomepage            "clientHomepage/:clientId"
+            3_logBook                   "logBook/:clientId"
+            4_Programs                  "clientProgram/:clientId"
+            5_Nutrition                 "clientDiet/:clientId"
+            6_CheckIn                   "clientCheckIn/:clientId" 
+            7_client settings           "clientSettings/:clientId"
+
+-----------------------------------------------------------------------------------
