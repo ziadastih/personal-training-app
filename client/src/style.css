@@ -1,0 +1,76 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --roboto: "Roboto", sans-serif;
+
+  /* =========main color ============ */
+  --blue: #1c85e8;
+
+  --mediumGrey: #434544;
+  --darkGrey: #343434;
+
+  --white: #fefefe;
+}
+
+/* ============================BODY START =========================== */
+
+body {
+  overflow-x: hidden;
+
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+}
+.logo-img {
+  margin-top: 30px;
+  margin-left: 30px;
+  width: 60px;
+}
+
+.bg-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  object-fit: contain;
+}
+.bg-container img {
+  width: 100vw;
+  height: 100vh;
+}
+
+.nav-bar {
+  position: fixed;
+  height: 60px;
+  width: 100vw;
+  background-color: var(--mediumGrey);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  bottom: 0;
+  left: 0;
+}
+
+.nav-bar a {
+  text-decoration: none;
+  color: var(--white);
+}
+.nav-bar i {
+  color: var(--white);
+  font-size: 20px;
+}
+#home-icon i {
+  color: var(--blue);
+}
