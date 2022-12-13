@@ -1,50 +1,33 @@
-import { useState } from "react";
-import Input from "./Input";
-const RegisterForm = () => {
-  const [inputsValue, setInputeValue] = useState([
-    {
-      name: "first name",
-      value: "",
-      type: "text",
-    },
-    { name: "last name", value: "", type: "text" },
-    { name: " email", value: "", type: "text" },
-    { name: "number", value: "", type: "number" },
-    { name: "password", value: "", type: "password" },
-  ]);
-  const updateInputState = (e) => {
-    let name = e.target.name;
-    setInputeValue((prevArr) => {
-      return prevArr.map((input) => {
-        return input.name === name
-          ? { ...input, value: e.target.value }
-          : input;
-      });
-    });
-  };
-  const inputs = inputsValue.map((input) => {
-    return (
-      <Input
-        key={input.name}
-        value={input.value}
-        updateValue={updateInputState}
-        name={input.name}
-        type={input.type}
-      />
-    );
-  });
+import useInputs from "../customHooks/inputsHook";
+import { IoIosClose } from "react-icons/io";
+
+const RegisterForm = ({ formState, toggleForm }) => {
+  const { inputs } = useInputs();
 
   return (
     <div>
-      <div className="block-container">
+      <div
+        className={
+          formState ? "block-container display-flex" : "block-container"
+        }
+      >
         <div className="box-header">
           <p>logo</p>
+          <IoIosClose
+            style={{
+              marginRight: "20px",
+              fontSize: "30px",
+              color: "var(--darkGrey)",
+            }}
+            data-id="register form"
+            onClick={toggleForm}
+          />
         </div>
-        <h3>let's get started!</h3>
+        <h3>sign Up!</h3>
 
         <div className="form-container">
           {inputs}
-          <button className="sign-up-btn btn">Sign up</button>
+          <button className="filled-btn btn">Sign up</button>
         </div>
       </div>
     </div>

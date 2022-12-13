@@ -1,10 +1,34 @@
+import { useState } from "react";
+
 import bodyBg from "../images/dark-mode-bg.png";
-import logo from "../images/logoMask.png";
+import logo from "../images/logoNoBg.png";
 import { GiBiceps } from "react-icons/gi";
 import { MdLogin } from "react-icons/md";
 import RegisterForm from "../components/RegisterForm";
+import LoginForm from "../components/LoginForm";
 
 const HomePage = () => {
+  const [formsState, setFormsState] = useState([
+    {
+      name: "login form",
+      toggle: false,
+    },
+    {
+      name: "register form",
+      toggle: false,
+    },
+  ]);
+
+  const toggleForm = (e) => {
+    let name = e.target.dataset.id;
+
+    setFormsState((prevState) => {
+      return prevState.map((form) => {
+        return form.name === name ? { ...form, toggle: !form.toggle } : form;
+      });
+    });
+  };
+
   return (
     <div className="homepage">
       <div className="logo-container">
@@ -29,13 +53,21 @@ const HomePage = () => {
             delectus tenetur nesciunt laudantium eos beatae suscipit omnis,
             deserunt dolore eveniet.
           </p>
-          <button className="btn toggle-register">
+          <button
+            className="btn toggle-register"
+            data-id="register form"
+            onClick={toggleForm}
+          >
             get started
             <span>
               <GiBiceps style={{ color: "var(--white)" }} />
             </span>
           </button>
-          <button className="btn toggle-login">
+          <button
+            className="btn toggle-login"
+            data-id="login form"
+            onClick={toggleForm}
+          >
             login
             <span>
               <MdLogin style={{ color: "var(--white)" }} />
@@ -44,7 +76,8 @@ const HomePage = () => {
         </div>
       </article>
 
-      <RegisterForm />
+      <RegisterForm formState={formsState[1].toggle} toggleForm={toggleForm} />
+      <LoginForm formState={formsState[0].toggle} toggleForm={toggleForm} />
     </div>
   );
 };

@@ -23,6 +23,9 @@ input {
   padding-left: 10px;
   color: var(--mediumGrey);
 }
+::placeholder {
+  text-transform: capitalize;
+}
 .btn {
   border: none;
   text-transform: capitalize;
@@ -35,6 +38,15 @@ input {
   font-family: var(--roboto);
   border-radius: 3px;
 }
+
+.filled-btn {
+  background-color: var(--blue);
+  height: 0;
+  padding: 20px;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+
 .nav-bar {
   position: fixed;
   height: 60px;
@@ -71,13 +83,15 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-top: 50px;
+  margin-bottom: 100px;
 }
 
 .logo-img {
   display: flex;
   align-items: center;
 
-  width: 200px;
+  width: 150px;
 }
 
 .bg-container {
@@ -163,7 +177,7 @@ body {
   background-color: var(--white);
   width: 80vw;
   z-index: 50;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -235,8 +249,8 @@ body {
   margin-bottom: 10px;
 }
 .name-alert p {
-  font-family: var(--fontSansSerif);
-  font-size: 12px;
+  font-family: var(--roboto);
+  font-size: 10px;
   font-weight: 700;
   text-transform: capitalize;
   color: var(--blue);
@@ -245,9 +259,13 @@ body {
 /* ============alerts for every input ============ */
 .name-alert .alert {
   display: none;
+
   color: var(--blue);
   font-size: 8px;
   font-weight: 400;
+}
+.name-alert .show-alert {
+  display: flex;
 }
 
 /* ==============login container ================= */
@@ -274,18 +292,17 @@ body {
   border-radius: 3px;
   cursor: pointer;
 }
-#login-password {
-  margin-bottom: 10px;
-}
+
 .forgot-password {
   width: 60vw;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
-  color: var(--mediumGrey);
+  margin-top: -15px;
+  margin-bottom: 20px;
+  color: var(--darkGrey);
   opacity: 0.8;
-  font-family: var(--fontSansSerif);
+  font-family: var(--roboto);
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
@@ -293,3 +310,12 @@ body {
 }
 
 /* ==================END OF HOMEPAGE ========================= */
+
+/* =====================js  =================== */
+.display-flex {
+  display: flex;
+}
+.select-role {
+  background-color: var(--blue);
+  color: var(--white);
+}
