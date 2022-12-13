@@ -10,10 +10,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
 
-        <Route path="/coach/:id" element={<CoachHomePage />} />
+        <Route path="/coach" element={<CoachHomePage />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
-
       <NavBar />
     </div>
   );

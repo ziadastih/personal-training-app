@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { PtContext } from "../context/PtContext";
 import { Link } from "react-router-dom";
 import {
   AiFillHome,
@@ -6,16 +8,17 @@ import {
   AiFillSetting,
 } from "react-icons/ai";
 import { BiSupport } from "react-icons/bi";
-import { MdLogin } from "react-icons/md";
+
 import { CgLogOut } from "react-icons/cg";
 
 const NavBar = () => {
   const { pathname } = useLocation();
+  const page = pathname.split("/")[1];
+  const { user } = useContext(PtContext);
+  let role = user.role;
 
-  const homeBlue =
-    pathname === "/" ||
-    pathname === "/coach/:coachId" ||
-    pathname === "/client/:clientId";
+  let blueHomeIcon = page === "" || page === "coach" || page === "client";
+  let blueSettingsIcon = page === "coachSettings" || page === "clientSettings";
 
   const styles = {
     fontSize: "24px",
@@ -25,19 +28,19 @@ const NavBar = () => {
   return (
     <nav className="nav-bar">
       <Link
-        to={
-          pathname === "/"
-            ? "/"
-            : pathname === "/coach/:coachId"
-            ? "/coach/:coachId"
-            : "/client/clienId"
-        }
-        style={!homeBlue ? styles : { ...styles, color: "var(--blue)" }}
+        to={role === "" ? "/" : role === "coach" ? "/coach" : "/client"}
+        style={blueHomeIcon ? { ...styles, color: "var(--blue)" } : styles}
       >
         <AiFillHome />
       </Link>
-      {pathname !== "/" && (
-        <Link style={styles}>
+
+      {role !== "" && (
+        <Link
+          to={role === "coach" ? "/coachSettings" : "/clientSettings"}
+          style={
+            blueSettingsIcon ? { ...styles, color: "var(--blue)" } : styles
+          }
+        >
           <AiFillSetting />
         </Link>
       )}
@@ -48,11 +51,7 @@ const NavBar = () => {
       <Link style={styles}>
         <BiSupport />
       </Link>
-      {pathname === "/" && (
-        <Link style={styles}>
-          <MdLogin />
-        </Link>
-      )}
+
       {pathname !== "/" && (
         <Link style={styles}>
           <CgLogOut />
