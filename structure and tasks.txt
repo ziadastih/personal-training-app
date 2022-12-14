@@ -2,7 +2,7 @@ Frontend:
 
 A__pages:                               Routes:
 
-general:    1_Homepage                 "/" ,"/login","/register","/features" 
+general:    1_Homepage                 "/"  
 
 coach:      2_coachHomepage            "/coach"
             3_Clients                  "/clients"
@@ -29,3 +29,12 @@ client:     2_clientHomepage            "client/:clientId"
             7_client settings           "clientSettings/:clientId"
 
 -----------------------------------------------------------------------------------
+TASKS:
+
+1_global:   
+            1_setup the features for the navBar and the support mail
+            
+
+2_Homepage :
+            1_need to setup the number verification with an api.
+            

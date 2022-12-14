@@ -4,7 +4,9 @@ const Input = ({ name, type, updateValue, value, alert }) => {
       <div className="name-alert">
         <p>{name}:</p>
         <p className={alert ? "alert show-alert" : "alert"}>
-          please provide {name}!
+          {name === "email" || name === "ingredient"
+            ? `please provide an ${name}`
+            : `please provide a ${name}`}
         </p>
       </div>
       <input

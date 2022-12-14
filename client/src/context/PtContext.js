@@ -3,6 +3,7 @@ import { createContext, useState } from "react";
 const PtContext = createContext();
 
 const PtContextProvider = (props) => {
+  const url = "http://192.168.1.195:5000";
   const [user, setUser] = useState({
     role: "",
     _id: "",
@@ -13,7 +14,7 @@ const PtContextProvider = (props) => {
   };
 
   return (
-    <PtContext.Provider value={{ user, updateUser }}>
+    <PtContext.Provider value={{ user, updateUser, url }}>
       {props.children}
     </PtContext.Provider>
   );

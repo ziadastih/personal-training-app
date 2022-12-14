@@ -2,10 +2,11 @@ import useInputs from "../../customHooks/inputsHook";
 import FormHeader from "../FormHeader";
 
 const RegisterForm = ({ formState, toggleForm }) => {
-  const [inputs] = useInputs("register");
+  const { inputs, validateInputs } = useInputs("register");
 
   return (
     <div>
+      {formState && <div className="overlay"></div>}
       <div
         className={
           formState ? "block-container display-flex" : "block-container"
@@ -15,7 +16,9 @@ const RegisterForm = ({ formState, toggleForm }) => {
 
         <div className="form-container">
           {inputs}
-          <button className="filled-btn btn">Sign up</button>
+          <button className="filled-btn btn" onClick={validateInputs}>
+            Sign up
+          </button>
         </div>
       </div>
     </div>

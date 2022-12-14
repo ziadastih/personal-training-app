@@ -8,9 +8,9 @@ import { useState, useContext } from "react";
 // =================login form component ================
 
 const LoginForm = ({ formState, toggleForm }) => {
-  const [inputs, inputsValue, resetInputs, loginAlert] = useInputs("login");
+  const { inputs, inputsValue, resetInputs, loginAlert } = useInputs("login");
   const [role, setRole] = useState("coach");
-  const { updateUser } = useContext(PtContext);
+  const { updateUser, url } = useContext(PtContext);
   const navigate = useNavigate();
 
   // ===============login function ====================
@@ -23,17 +23,14 @@ const LoginForm = ({ formState, toggleForm }) => {
     const password = values[1];
 
     try {
-      const { data } = await axios.post(
-        "http://192.168.1.195:5000/api/v1/auth/login",
-        {
-          email,
-          password,
-          role,
-        }
-      );
+      const { data } = await axios.post(`${url}/api/v1/auth/login`, {
+        email,
+        password,
+        role,
+      });
 
       let id = role === "coach" ? data.coach.coachId : data.client.clientId;
-      console.log(id);
+
       resetInputs();
       updateUser(role, id);
       navigate(`/${role}`);
@@ -44,6 +41,7 @@ const LoginForm = ({ formState, toggleForm }) => {
 
   return (
     <div>
+      {formState && <div className="overlay"></div>}
       <div
         className={
           formState ? "block-container display-flex" : "block-container"
