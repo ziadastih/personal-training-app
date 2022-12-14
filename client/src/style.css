@@ -24,7 +24,9 @@ input {
   color: var(--mediumGrey);
 }
 ::placeholder {
+  font-family: var(--roboto);
   text-transform: capitalize;
+  font-size: 8px;
 }
 .btn {
   border: none;
@@ -198,6 +200,12 @@ body {
 }
 
 /* ===========register header logo and close btn === */
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
 .box-header {
   display: flex;
   width: 80vw;
@@ -213,6 +221,7 @@ body {
   font-weight: 400;
   font-size: 14px;
 }
+
 #close-btn {
   margin-right: 20px;
   cursor: pointer;

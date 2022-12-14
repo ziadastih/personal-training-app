@@ -8,8 +8,14 @@ const PtContextProvider = (props) => {
     _id: "",
   });
 
+  const updateUser = (role, id) => {
+    setUser({ role, id });
+  };
+
   return (
-    <PtContext.Provider value={{ user }}>{props.children}</PtContext.Provider>
+    <PtContext.Provider value={{ user, updateUser }}>
+      {props.children}
+    </PtContext.Provider>
   );
 };
 

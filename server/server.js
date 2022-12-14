@@ -40,7 +40,12 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 // ==============security ===========================
 
-// server.use(cors());
+server.use(
+  cors({
+    origin: "*",
+  })
+);
+
 // server.use(xss());
 // server.use(helmet());
 // server.use(
@@ -51,6 +56,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 //     },
 //   })
 // );
+
 // ================routes ==========
 server.use(bodyParser.json({ limit: "50mb" }));
 server.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -74,7 +80,7 @@ server.use(errorHandlerMiddleware);
 const start = async () => {
   try {
     await connectDB(process.env.PT_URI);
-    server.listen(3000, "192.168.1.195", () => {
+    server.listen(5000, "192.168.1.195", () => {
       console.log("server is listening");
     });
   } catch (error) {

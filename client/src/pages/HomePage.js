@@ -4,17 +4,17 @@ import bodyBg from "../images/dark-mode-bg.png";
 import logo from "../images/logoNoBg.png";
 import { GiBiceps } from "react-icons/gi";
 import { MdLogin } from "react-icons/md";
-import RegisterForm from "../components/RegisterForm";
-import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/homepageComponents/RegisterForm";
+import LoginForm from "../components/homepageComponents/LoginForm";
 
 const HomePage = () => {
   const [formsState, setFormsState] = useState([
     {
-      name: "login form",
+      name: "login",
       toggle: false,
     },
     {
-      name: "register form",
+      name: "sign up",
       toggle: false,
     },
   ]);
@@ -55,7 +55,7 @@ const HomePage = () => {
           </p>
           <button
             className="btn toggle-register"
-            data-id="register form"
+            data-id="sign up"
             onClick={toggleForm}
           >
             get started
@@ -65,7 +65,7 @@ const HomePage = () => {
           </button>
           <button
             className="btn toggle-login"
-            data-id="login form"
+            data-id="login"
             onClick={toggleForm}
           >
             login

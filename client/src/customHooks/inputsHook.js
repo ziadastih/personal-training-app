@@ -1,18 +1,53 @@
 import { useState } from "react";
 import Input from "../components/Input";
-const useInputs = () => {
-  const [inputsValue, setInputsValue] = useState([
-    {
-      name: "first name",
-      value: "",
-      type: "text",
-      alert: false,
-    },
-    { name: "last name", value: "", type: "text", alert: false },
-    { name: " email", value: "", type: "text", alert: false },
-    { name: "number", value: "", type: "number", alert: false },
-    { name: "password", value: "", type: "password", alert: false },
-  ]);
+const useInputs = (value) => {
+  const [inputsValue, setInputsValue] = useState(
+    value === "register"
+      ? [
+          {
+            name: "first name",
+            value: "",
+            type: "text",
+            alert: false,
+          },
+          { name: "last name", value: "", type: "text", alert: false },
+          { name: "email", value: "", type: "text", alert: false },
+          { name: "number", value: "", type: "number", alert: false },
+          { name: "password", value: "", type: "password", alert: false },
+        ]
+      : value === "login"
+      ? [
+          { name: "email", value: "", type: "text", alert: false },
+          { name: "password", value: "", type: "password", alert: false },
+        ]
+      : [
+          {
+            name: "first name",
+            value: "",
+            type: "text",
+            alert: false,
+          },
+          { name: "last name", value: "", type: "text", alert: false },
+          { name: "email", value: "", type: "text", alert: false },
+          { name: "number", value: "", type: "number", alert: false },
+        ]
+  );
+
+  const loginAlert = () => {
+    setInputsValue((prevValues) => {
+      return prevValues.map((input) => {
+        return { ...input, alert: true };
+      });
+    });
+  };
+
+  const resetInputs = () => {
+    setInputsValue((prevValues) => {
+      return prevValues.map((input) => {
+        return { ...input, value: "" };
+      });
+    });
+  };
 
   const updateInputState = (e) => {
     let name = e.target.name;
@@ -37,7 +72,7 @@ const useInputs = () => {
       />
     );
   });
-  return [inputs];
+  return [inputs, inputsValue, resetInputs, loginAlert];
 };
 
 export default useInputs;

@@ -11,11 +11,6 @@ const register = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ coach, token });
 };
 
-/**
- *
- * @param {*} req
- * @param {*} res
- */
 const login = async (req, res) => {
   // ============get mail and password from frontend
   const { email, password, role } = req.body;
