@@ -37,4 +37,5 @@ TASKS:
 
 2_Homepage :
             1_need to setup the number verification with an api.
+            2_forgot password function
             

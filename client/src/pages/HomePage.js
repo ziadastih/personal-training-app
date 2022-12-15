@@ -42,7 +42,7 @@ const HomePage = () => {
         <div className="text-content">
           <div className="slogan">
             <h2>
-              think <span>you</span> can
+              think <span>you</span> can,
             </h2>
             <h1>
               you <span>can!</span>

@@ -1,7 +1,8 @@
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
-import { PtContext } from "../context/PtContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { PtContext } from "../context/PtContext";
 import {
   AiFillHome,
   AiOutlineQuestionCircle,
@@ -14,7 +15,22 @@ import { CgLogOut } from "react-icons/cg";
 const NavBar = () => {
   const { pathname } = useLocation();
   const page = pathname.split("/")[1];
-  const { user } = useContext(PtContext);
+  const { user, resetUser, url, resetData } = useContext(PtContext);
+  const navigate = useNavigate();
+
+  const logoutFunc = async () => {
+    try {
+      const data = await axios.post(`${url}/api/v1/auth/logout`, {
+        withCredentials: true,
+      });
+      resetUser();
+      resetData();
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   let role = user.role;
 
   let blueHomeIcon = page === "" || page === "coach" || page === "client";
@@ -52,11 +68,7 @@ const NavBar = () => {
         <BiSupport />
       </Link>
 
-      {pathname !== "/" && (
-        <Link style={styles}>
-          <CgLogOut />
-        </Link>
-      )}
+      {pathname !== "/" && <CgLogOut style={styles} onClick={logoutFunc} />}
     </nav>
   );
 };

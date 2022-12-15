@@ -42,7 +42,8 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 server.use(
   cors({
-    origin: "*",
+    origin: "http://192.168.1.195:3000",
+    credentials: true,
   })
 );
 

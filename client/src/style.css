@@ -70,6 +70,33 @@ input {
   opacity: 0.5;
   z-index: 20;
 }
+/* ======================global header ===================== */
+header {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10vh;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--roboto);
+  color: var(--white);
+
+  text-transform: uppercase;
+  font-weight: 700;
+  width: 80vw;
+}
+.page-header img {
+  width: 40px;
+}
+.page-header h2 {
+  letter-spacing: 1.2px;
+  font-size: 24px;
+}
 
 /* ============================BODY START =========================== */
 
@@ -146,7 +173,7 @@ body {
   color: var(--blue);
 }
 .text-content h2 {
-  font-size: 20.5px;
+  font-size: 20px;
   text-transform: uppercase;
 }
 .text-content h1 {
@@ -329,6 +356,150 @@ body {
 }
 
 /* ==================END OF HOMEPAGE ========================= */
+
+/* =====================start of coach homepage =========== */
+
+.coach-homepage {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--darkGrey);
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+  margin-top: 30px;
+}
+
+.profile-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+
+  width: 80vw;
+  position: relative;
+}
+.profile-container ::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--mediumGrey);
+}
+.profile-container ::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--mediumGrey);
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  width: 80vw;
+}
+.profile-info h4 {
+  font-family: var(--roboto);
+  color: var(--blue);
+  font-size: 15px;
+  text-transform: capitalize;
+}
+.coach-name {
+  font-family: var(--roboto);
+  text-transform: capitalize;
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 400;
+}
+.dashboard-container {
+  display: flex;
+  align-items: flex-start;
+  width: 80vw;
+  justify-content: space-between;
+}
+.dashboard-container h4 {
+  font-family: var(--roboto);
+  color: var(--blue);
+  font-size: 15px;
+  text-transform: capitalize;
+}
+.stat-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: var(--roboto);
+  font-size: 15px;
+  text-transform: capitalize;
+}
+.stat-box p {
+  color: var(--white);
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+.stat-box span {
+  color: var(--white);
+  background-color: var(--blue);
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.navigation-main-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  width: 100vw;
+  margin-top: 30px;
+}
+
+.navigation-tools-container {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 4vw;
+  width: 80vw;
+  margin-bottom: 70px;
+  place-items: center;
+}
+
+.access-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(--mediumGrey);
+  border-radius: 15px;
+  width: 38vw;
+  height: 160px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.access-box i {
+  font-size: 30px;
+  color: var(--blue);
+  margin-bottom: 30px;
+}
+
+.access-box p {
+  color: var(--white);
+  text-transform: capitalize;
+  letter-spacing: 1.2px;
+  font-size: 20px;
+  font-family: var(--roboto);
+}
 
 /* =====================js  =================== */
 .display-flex {

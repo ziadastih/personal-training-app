@@ -23,16 +23,28 @@ const LoginForm = ({ formState, toggleForm }) => {
     const password = values[1];
 
     try {
-      const { data } = await axios.post(`${url}/api/v1/auth/login`, {
-        email,
-        password,
-        role,
-      });
+      const { data } = await axios.post(
+        `${url}/api/v1/auth/login`,
+        {
+          email,
+          password,
+          role,
+        },
+        { withCredentials: true }
+      );
 
       let id = role === "coach" ? data.coach.coachId : data.client.clientId;
+      let firstName =
+        role === "coach"
+          ? data.coach.coachFirstName
+          : data.client.clientFirstName;
+      let lastName =
+        role === "coach"
+          ? data.coach.coachLastName
+          : data.client.clientLastName;
 
       resetInputs();
-      updateUser(role, id);
+      updateUser(role, id, firstName, lastName);
       navigate(`/${role}`);
     } catch (error) {
       loginAlert();
