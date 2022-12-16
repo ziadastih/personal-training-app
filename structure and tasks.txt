@@ -38,4 +38,12 @@ TASKS:
 2_Homepage :
             1_need to setup the number verification with an api.
             2_forgot password function
-            
+
+
+3_coachHomepage:
+            1_clear maybe change design
+            2_either fetch coach again or set it in localStorage or session storage so whenever i refresh data will not lost 
+
+4_clients:  
+            1_need to setup a client input to map over clients and send props through it 
+             

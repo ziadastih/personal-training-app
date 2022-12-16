@@ -1,13 +1,14 @@
 import { PtContext } from "../context/PtContext";
 import { useNavigate } from "react-router-dom";
+import PageHeader from "../components/PageHeader";
 import axios from "axios";
 import { BiDumbbell } from "react-icons/bi";
 import { BsFillBellFill } from "react-icons/bs";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { GiMeal } from "react-icons/gi";
 import { HiUserGroup } from "react-icons/hi";
 import { RxActivityLog } from "react-icons/rx";
-import logo from "../images/logoNoBg.png";
+
 import NavigationBox from "../components/NavigationBox";
 
 // ================Component ===============
@@ -42,14 +43,8 @@ const CoachHomePage = () => {
   // ==================homepage html =====================
 
   return (
-    <div className="coach-homepage">
-      <header>
-        <div className="page-header">
-          <img src={logo} alt="" />
-          <h2>home</h2>
-          <BsFillBellFill style={{ color: "var(--blue)" }} />
-        </div>
-      </header>
+    <div className="all-pages-bg">
+      <PageHeader name="home" icon={<BsFillBellFill />} />
       <div className="profile-section">
         <div className="profile-container">
           <div className="profile-info">
@@ -61,15 +56,15 @@ const CoachHomePage = () => {
             <h4>dashboard</h4>
             <div className="stat-box">
               <p>clients</p>
-              <span>{dataLength.cLength}</span>
+              <span>{dataLength[0].value}</span>
             </div>
             <div className="stat-box">
               <p>programs</p>
-              <span>{dataLength.wLength}</span>
+              <span>{dataLength[1].value}</span>
             </div>
             <div className="stat-box">
               <p>diets</p>
-              <span>{dataLength.dLength}</span>
+              <span>{dataLength[2].value}</span>
             </div>
           </div>
         </div>
@@ -83,6 +78,11 @@ const CoachHomePage = () => {
             func={() => navigate(`/clients`)}
           />
           <NavigationBox
+            name="activities"
+            icon={<RxActivityLog />}
+            func={() => navigate(`/activities`)}
+          />
+          <NavigationBox
             name="program"
             icon={<BiDumbbell />}
             func={() => navigate(`/program`)}
@@ -91,11 +91,6 @@ const CoachHomePage = () => {
             name="nutrition"
             icon={<GiMeal />}
             func={() => navigate(`/nutrition`)}
-          />
-          <NavigationBox
-            name="activities"
-            icon={<RxActivityLog />}
-            func={() => navigate(`/activities`)}
           />
         </div>
       </div>

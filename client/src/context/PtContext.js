@@ -22,23 +22,58 @@ const PtContextProvider = (props) => {
 
   // ======================dataLength ======================
 
-  const [dataLength, setDataLength] = useState({
-    wLength: 0,
-    dLength: 0,
-    cLength: 0,
-  });
+  const [dataLength, setDataLength] = useState([
+    { value: 0 },
+    {
+      value: 0,
+    },
+    {
+      value: 0,
+    },
+  ]);
 
   const setOriginalData = (workoutLength, dietLength, clientLength) => {
-    setDataLength({
-      wLength: workoutLength >= 10 ? workoutLength : `0${workoutLength}`,
-      dLength: dietLength >= 10 ? dietLength : `0${dietLength}`,
-      cLength: clientLength >= 10 ? clientLength : `0${clientLength}`,
+    setDataLength([
+      {
+        value: clientLength,
+      },
+      {
+        value: workoutLength,
+      },
+      {
+        value: dietLength,
+      },
+    ]);
+  };
+
+  const decreaseData = (i) => {
+    setDataLength((prevState) => {
+      return prevState.map((obj, index) => {
+        return index === i ? { value: obj.value - 1 } : obj;
+      });
+    });
+  };
+  const increaseData = (i) => {
+    setDataLength((prevState) => {
+      return prevState.map((obj, index) => {
+        return index === i ? { value: obj.value + 1 } : obj;
+      });
     });
   };
 
   const resetData = () => {
-    setDataLength({ wLength: 0, dLength: 0, cLength: 0 });
+    setDataLength([
+      { value: 0 },
+      {
+        value: 0,
+      },
+      {
+        value: 0,
+      },
+    ]);
   };
+
+  // ==================end of datalength ===============
 
   return (
     <PtContext.Provider
@@ -50,6 +85,8 @@ const PtContextProvider = (props) => {
         setOriginalData,
         dataLength,
         resetData,
+        decreaseData,
+        increaseData,
       }}
     >
       {props.children}
