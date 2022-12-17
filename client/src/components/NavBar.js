@@ -25,6 +25,7 @@ const NavBar = () => {
       });
       resetUser();
       resetData();
+      localStorage.clear();
       navigate("/");
     } catch (error) {
       console.log(error);

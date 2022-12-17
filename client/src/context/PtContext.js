@@ -1,10 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { json } from "react-router-dom";
 
 const PtContext = createContext();
 
 const PtContextProvider = (props) => {
   const url = "http://192.168.1.195:5000";
-  // =============user related  =======================
+  // ============= user state and dataLength state  =======================
 
   const [user, setUser] = useState({
     role: "",
@@ -12,16 +13,6 @@ const PtContextProvider = (props) => {
     firstName: "",
     lastName: "",
   });
-
-  const resetUser = () => {
-    setUser({ role: "", id: "", firstName: "", lastName: "" });
-  };
-  const updateUser = (role, id, firstName, lastName) => {
-    return setUser({ role, id, firstName, lastName });
-  };
-
-  // ======================dataLength ======================
-
   const [dataLength, setDataLength] = useState([
     { value: 0 },
     {
@@ -32,7 +23,56 @@ const PtContextProvider = (props) => {
     },
   ]);
 
-  const setOriginalData = (workoutLength, dietLength, clientLength) => {
+  // ====================reset and update user functions===========
+
+  const resetUser = () => {
+    setUser({ role: "", id: "", firstName: "", lastName: "" });
+  };
+  const updateUser = (role, id, firstName, lastName) => {
+    return setUser({ role, id, firstName, lastName });
+  };
+
+  // ===============set user in local storage so we make sure we dont lose it when we want to refresh and we update the local storage whenever user change
+
+  useEffect(() => {
+    const localStorageUser = JSON.parse(localStorage.getItem("user"));
+
+    if (localStorageUser) {
+      updateUser(
+        localStorageUser.role,
+        localStorageUser.id,
+        localStorageUser.firstName,
+        localStorageUser.lastName
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user.id.length > 0) {
+      return localStorage.setItem("user", JSON.stringify(user));
+    }
+  }, [user]);
+
+  // ======================update local storage whenever datalength change , and in case we refresh we keep the same data
+
+  useEffect(() => {
+    const dataInLocalS = JSON.parse(localStorage.getItem("dataLength"));
+    if (dataInLocalS) {
+      setOriginalData(
+        dataInLocalS[0].value,
+        dataInLocalS[1].value,
+        dataInLocalS[2].value
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("dataLength", JSON.stringify(dataLength));
+  }, [dataLength]);
+
+  // ===============set the datalength state when we fetch it first in coach homepage//
+
+  const setOriginalData = (clientLength, workoutLength, dietLength) => {
     setDataLength([
       {
         value: clientLength,
@@ -45,6 +85,8 @@ const PtContextProvider = (props) => {
       },
     ]);
   };
+
+  // ===================decrease anad increase  reset dataLength =================
 
   const decreaseData = (i) => {
     setDataLength((prevState) => {

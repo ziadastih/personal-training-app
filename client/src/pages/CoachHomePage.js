@@ -30,12 +30,13 @@ const CoachHomePage = () => {
           let dietLength = data.dataLength[0].dietLength;
           let clientLength = data.dataLength[0].clientLength;
 
-          setOriginalData(workoutLength, dietLength, clientLength);
+          setOriginalData(clientLength, workoutLength, dietLength);
         }
       } catch (error) {
         console.log(error);
       }
     };
+
     fetchData();
   }, []);
   const navigate = useNavigate();
