@@ -2,7 +2,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { FaUserEdit } from "react-icons/fa";
 import { PtContext } from "../context/PtContext";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ================== One Client component ==============
@@ -24,7 +24,7 @@ const OneClient = ({ name, id, date }) => {
         withCredentials: true,
       });
 
-      decreaseData(0);
+      await decreaseData(0);
 
       // ==============bug in the function ===================
       const updateData = await axios.patch(

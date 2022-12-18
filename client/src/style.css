@@ -87,6 +87,45 @@ input {
   opacity: 0.5;
   z-index: 20;
 }
+/* =====================plus btn  ======================= */
+.plus-btn {
+  left: 10px;
+  position: fixed;
+  color: var(--blue);
+}
+
+/* =========================== page center section  ======================== */
+.center-section-btn-container {
+  display: flex;
+  height: 40vh;
+
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: 300ms ease-in;
+}
+.center-section-btn-container h3 {
+  font-family: var(--roboto);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 41px;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+.center-section-btn-container button {
+  font-weight: 400;
+  text-transform: capitalize;
+  height: 40px;
+  width: 100px;
+  margin-top: 0;
+  color: var(--white);
+  background-color: var(--blue);
+  letter-spacing: 1.2px;
+}
+
 /* ======================global header ===================== */
 header {
   width: 100vw;

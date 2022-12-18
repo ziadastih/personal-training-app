@@ -34,7 +34,7 @@ const useInputs = (value) => {
           { name: "number", value: "", type: "number", alert: false },
         ]
   );
-  const { url } = useContext(PtContext);
+  const { url, increaseData, dataLength } = useContext(PtContext);
   const activateAlert = (name) => {
     setInputsValue((prevValues) => {
       return prevValues.map((input) => {
@@ -81,7 +81,39 @@ const useInputs = (value) => {
         console.log(error.msg);
       }
     } else {
-      return { firstName, lastName, email, number };
+      let chars = `qwertyuiopasdfghjklzxcvbnmAQWERTYUIOPSDFGHJKLZXCVBNM1234567890!@#$%^&*()_+`;
+
+      let password = ``;
+      let lengthOfPass = 12;
+      for (let i = 0; i < lengthOfPass; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      try {
+        const { client } = await axios.post(
+          `${url}/api/v1/client`,
+          {
+            firstName,
+            lastName,
+            email,
+            number,
+            password,
+          },
+          { withCredentials: true }
+        );
+        await increaseData(0);
+        const updateData = await axios.patch(
+          `${url}/api/v1/dataLength`,
+
+          { clientLength: dataLength[0].value },
+          {
+            withCredentials: true,
+          }
+        );
+        resetInputs();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
