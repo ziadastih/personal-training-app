@@ -18,16 +18,26 @@ const ClientsPage = () => {
   const { dataLength } = useContext(PtContext);
   const { url } = useContext(PtContext);
 
-  // ====================fetch clients  ==================
+  // ====================fetch clients depend on dataLength and searchInput ==================
   useEffect(() => {
     const fetchClients = async () => {
-      const { data } = await axios.get(`${url}/api/v1/client/?count=30`, {
-        withCredentials: true,
-      });
-      setClients(data.clientsInfo);
+      if (searchInput.length === 0) {
+        const { data } = await axios.get(`${url}/api/v1/client/?count=30`, {
+          withCredentials: true,
+        });
+        setClients(data.clientsInfo);
+      } else {
+        const { data } = await axios.get(
+          `${url}/api/v1/client/?name=${searchInput}`,
+          {
+            withCredentials: true,
+          }
+        );
+        setClients(data.clientsInfo);
+      }
     };
     fetchClients();
-  }, [dataLength]);
+  }, [dataLength, searchInput]);
 
   // =============update search input on Change ===========
 

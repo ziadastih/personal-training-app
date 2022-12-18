@@ -15,7 +15,7 @@ import NavigationBox from "../components/NavigationBox";
 
 const CoachHomePage = () => {
   const { url, user, setOriginalData, dataLength } = useContext(PtContext);
-
+  // ============get the dataLength and set it state ===================
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -86,16 +86,16 @@ const PtContextProvider = (props) => {
   };
 
   // ===================decrease anad increase  reset dataLength =================
-
   const decreaseData = (i) => {
-    setDataLength((prevState) => {
+    return setDataLength((prevState) => {
       return prevState.map((obj, index) => {
         return index === i ? { value: obj.value - 1 } : obj;
       });
     });
   };
+
   const increaseData = (i) => {
-    setDataLength((prevState) => {
+    return setDataLength((prevState) => {
       return prevState.map((obj, index) => {
         return index === i ? { value: obj.value + 1 } : obj;
       });

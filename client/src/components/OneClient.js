@@ -2,7 +2,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { FaUserEdit } from "react-icons/fa";
 import { PtContext } from "../context/PtContext";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ================== One Client component ==============
@@ -16,7 +16,7 @@ const OneClient = ({ name, id, date }) => {
     setVerificationState((prevState) => !prevState);
   };
 
-  // ================bug in the function ==============
+  // ================delete user when updating the dataLenght it gives the old value so we substract 1  ==============
 
   const deleteUser = async () => {
     try {
@@ -24,13 +24,12 @@ const OneClient = ({ name, id, date }) => {
         withCredentials: true,
       });
 
-      await decreaseData(0);
+      decreaseData(0);
 
-      // ==============bug in the function ===================
       const updateData = await axios.patch(
         `${url}/api/v1/dataLength`,
 
-        { clientLength: dataLength[0].value },
+        { clientLength: dataLength[0].value - 1 },
         {
           withCredentials: true,
         }
@@ -42,6 +41,8 @@ const OneClient = ({ name, id, date }) => {
       console.log(error.message);
     }
   };
+
+  // ==============OneClient Component Html ===============
 
   return (
     <div>

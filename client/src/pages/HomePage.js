@@ -18,6 +18,7 @@ const HomePage = () => {
       toggle: false,
     },
   ]);
+  // ============open and close form function will be sent by props ==========
 
   const toggleForm = (e) => {
     let name = e.target.dataset.id;

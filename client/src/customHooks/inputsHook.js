@@ -2,6 +2,9 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import Input from "../components/Input";
 import { PtContext } from "../context/PtContext";
+
+// =============useInput custom Hook =================
+
 const useInputs = (value) => {
   const [inputsValue, setInputsValue] = useState(
     value === "register"
@@ -35,6 +38,8 @@ const useInputs = (value) => {
         ]
   );
   const { url, increaseData, dataLength } = useContext(PtContext);
+
+  // ===========activate alert depend on the validation  =========================
   const activateAlert = (name) => {
     setInputsValue((prevValues) => {
       return prevValues.map((input) => {
@@ -43,10 +48,14 @@ const useInputs = (value) => {
     });
   };
 
+  // ==========validate email with regex  ========================
+
   const validateEmail = (emailValue) => {
     let res = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return res.test(emailValue);
   };
+
+  // ===========validate inputs and submit request on the api, depend on the inputs we have  =======================
 
   const validateInputs = async () => {
     const values = inputsValue.map((input) => {
@@ -102,14 +111,16 @@ const useInputs = (value) => {
           { withCredentials: true }
         );
         await increaseData(0);
+
         const updateData = await axios.patch(
           `${url}/api/v1/dataLength`,
 
-          { clientLength: dataLength[0].value },
+          { clientLength: dataLength[0].value + 1 },
           {
             withCredentials: true,
           }
         );
+        console.log(updateData);
         resetInputs();
       } catch (error) {
         console.log(error);
@@ -117,6 +128,7 @@ const useInputs = (value) => {
     }
   };
 
+  // ===================login alert ====================
   const loginAlert = () => {
     setInputsValue((prevValues) => {
       return prevValues.map((input) => {
@@ -124,7 +136,7 @@ const useInputs = (value) => {
       });
     });
   };
-
+  // ==========reset the values of inputs after successfully submitting a form
   const resetInputs = () => {
     setInputsValue((prevValues) => {
       return prevValues.map((input) => {
@@ -132,7 +144,7 @@ const useInputs = (value) => {
       });
     });
   };
-
+  // ====================update input state depend on the name of the input
   const updateInputState = (e) => {
     let name = e.target.name;
     setInputsValue((prevArr) => {
@@ -143,7 +155,7 @@ const useInputs = (value) => {
       });
     });
   };
-
+  // =================map and display inputs depend on Input Component ====
   const inputs = inputsValue.map((input) => {
     return (
       <Input
@@ -156,6 +168,7 @@ const useInputs = (value) => {
       />
     );
   });
+  // ===============our returned func and state from the hook ========
   return { inputs, inputsValue, resetInputs, loginAlert, validateInputs };
 };
 

@@ -4,6 +4,8 @@ import FormHeader from "../FormHeader";
 const RegisterClient = ({ formState, toggleForm }) => {
   const { inputs, validateInputs } = useInputs("client");
 
+  // =============RegisterClient html  ===================
+
   return (
     <div>
       {formState && <div className="overlay"></div>}
