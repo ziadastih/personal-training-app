@@ -31,6 +31,7 @@ const ProgramsPage = () => {
     fetchWorkouts();
   }, [dataLength, searchInput, page]);
 
+  console.log(programs);
   // =============update search input on Change ===========
 
   const updateSearch = (e) => {

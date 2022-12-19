@@ -654,7 +654,9 @@ body {
   justify-content: center;
   flex-direction: column;
   width: 80vw;
-  /* border-bottom: 1px solid var(--mediumGrey); */
+}
+.border-bottom {
+  border-bottom: 1px solid var(--mediumGrey);
 }
 /* =========workout styling that will be dealt with in js ========== */
 .program {
@@ -674,10 +676,6 @@ body {
   color: var(--white);
   font-weight: 400;
   letter-spacing: 1.2px;
-}
-
-#show-program {
-  transition: 100ms ease-in;
 }
 
 /* ===================overview container ==================== */
@@ -731,9 +729,6 @@ body {
   font-size: 12px;
 }
 
-.box-arrow {
-  cursor: pointer;
-}
 /* =====================week container =========================== */
 .days-container {
   display: grid;
@@ -758,7 +753,7 @@ body {
 /* =================== created workouts ============ */
 .created-workouts {
   margin-top: 20px;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -792,7 +787,7 @@ body {
 .one-workout p {
   text-align: center;
   color: var(--blue);
-  font-weight: 700;
+
   letter-spacing: 1.2px;
 }
 .one-workout span {
@@ -802,17 +797,16 @@ body {
   margin-right: 20px;
 }
 .created-workouts h2 {
-  font-size: 18px;
+  font-size: 15px;
   font-family: var(--roboto);
   color: var(--white);
   font-weight: 400;
   margin-bottom: 20px;
+  opacity: 0.5;
 }
 /* ========================end of workout overview section ======= */
 /* ==============start of chosen exercises section ========== */
-#show-exrecises {
-  transition: 100ms ease-in;
-}
+
 .exercises-container {
   margin-top: 20px;
   width: 100vw;

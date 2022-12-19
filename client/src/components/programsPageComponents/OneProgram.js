@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEditNote } from "react-icons/md";
 import {
@@ -6,26 +6,44 @@ import {
   BsArrowsCollapse,
   BsArrowsExpand,
 } from "react-icons/bs";
-
+import OneWorkout from "./OneWorkout";
 import useDays from "../../customHooks/DaysHook";
 
 const OneProgram = ({ program }) => {
   const [overviewState, setOverviewState] = useState(false);
   const { daysArr, currentDay } = useDays();
+  const [workoutsArr, setWorkoutsArr] = useState([]);
   const navigate = useNavigate();
-  console.log(currentDay);
+
+  const toggleOverview = () => {
+    setOverviewState((prevState) => !prevState);
+  };
+
+  useEffect(() => {
+    setWorkoutsArr(program.weeks[0].days[currentDay[0].index].workouts);
+  }, [currentDay]);
+
+  const displayWorkouts = workoutsArr.map((workout, index) => {
+    return <OneWorkout key={index} workout={workout} />;
+  });
 
   return (
-    <div className="program-container">
+    <div
+      className={
+        overviewState ? "program-container border-bottom" : "program-container"
+      }
+    >
       <div className="program">
         {!overviewState && (
           <BsArrowsExpand
             style={{ marginLeft: "30px", color: "var(--white)", opacity: 0.5 }}
+            onClick={toggleOverview}
           />
         )}
         {overviewState && (
           <BsArrowsCollapse
             style={{ marginLeft: "30px", color: "var(--white)", opacity: 0.5 }}
+            onClick={toggleOverview}
           />
         )}
 
@@ -47,7 +65,7 @@ const OneProgram = ({ program }) => {
 
       {/* ======================overview =================== */}
 
-      {!overviewState && (
+      {overviewState && (
         <div className="overview-container">
           <div className="date-stats">
             <p className="created-at">
@@ -58,7 +76,13 @@ const OneProgram = ({ program }) => {
             </p>
           </div>
           <div className="days-container">{daysArr}</div>
-          <div className="created-workouts"></div>
+          <div className="created-workouts">
+            {displayWorkouts.length === 0 ? (
+              <h2>No workouts available</h2>
+            ) : (
+              displayWorkouts
+            )}
+          </div>
         </div>
       )}
     </div>
