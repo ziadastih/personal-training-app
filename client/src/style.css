@@ -64,8 +64,22 @@ input {
   padding: 20px;
   color: var(--white);
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
 }
-
+.full-btn {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: var(--blue);
+  color: var(--white);
+  border-radius: 5px;
+  border: none;
+  text-transform: capitalize;
+  cursor: pointer;
+}
 .nav-bar {
   position: fixed;
   height: 60px;
@@ -810,7 +824,7 @@ body {
 .exercises-container {
   margin-top: 20px;
   width: 100vw;
-  display: none;
+  display: grid;
   grid-template-columns: repeat(1, auto);
   place-items: center;
 }
