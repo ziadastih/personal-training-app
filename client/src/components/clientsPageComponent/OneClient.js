@@ -1,8 +1,8 @@
 import { BsFillTrashFill } from "react-icons/bs";
 import { FaUserEdit } from "react-icons/fa";
-import { PtContext } from "../context/PtContext";
+import { PtContext } from "../../context/PtContext";
 import axios from "axios";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ================== One Client component ==============
@@ -52,16 +52,10 @@ const OneClient = ({ name, id, date }) => {
           <p className="client-full-name">{name}</p>
           <span>{date}</span>
         </div>
-        <div className="tools">
+        <div className="tools" style={{ color: "var(--blue)" }}>
           <i className="fa-solid fa-user-pen" id="manage-client"></i>
-          <BsFillTrashFill
-            style={{ color: "var(--blue)" }}
-            onClick={toggleBox}
-          />
-          <FaUserEdit
-            style={{ color: "var(--blue)" }}
-            onClick={() => navigate(`/clients/${id}`)}
-          />
+          <BsFillTrashFill onClick={toggleBox} />
+          <FaUserEdit onClick={() => navigate(`/clients/${id}`)} />
         </div>
       </div>
 

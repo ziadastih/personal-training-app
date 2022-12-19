@@ -646,6 +646,340 @@ body {
   cursor: pointer;
 }
 
+/* ==========================start of Pograms Page ===================== */
+
+.program-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 80vw;
+  /* border-bottom: 1px solid var(--mediumGrey); */
+}
+/* =========workout styling that will be dealt with in js ========== */
+.program {
+  width: 100vw;
+  height: 80px;
+  border-bottom: 1px solid var(--mediumGrey);
+  font-family: var(--roboto);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: capitalize;
+}
+
+.program p {
+  text-align: center;
+  color: var(--white);
+  font-weight: 400;
+  letter-spacing: 1.2px;
+}
+
+#show-program {
+  transition: 100ms ease-in;
+}
+
+/* ===================overview container ==================== */
+
+.overview-container {
+  display: flex;
+  border: none;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: transparent;
+
+  width: 100vw;
+
+  z-index: 1;
+  transition: 300ms ease-in;
+}
+
+/* ============date inside the overview container ========== */
+.date-stats {
+  width: 80vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.date-stats p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-family: var(--roboto);
+  font-size: 10px;
+  text-transform: capitalize;
+  gap: 5px;
+  position: relative;
+}
+.date-stats p::after {
+  position: absolute;
+  content: "";
+  bottom: -5px;
+  left: 0px;
+  height: 1px;
+  width: 100%;
+  background-color: var(--white);
+  opacity: 0.3;
+}
+.date-stats p span {
+  color: var(--blue);
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.box-arrow {
+  cursor: pointer;
+}
+/* =====================week container =========================== */
+.days-container {
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  margin-top: 30px;
+  place-content: center;
+  gap: 10px;
+  width: 100vw;
+}
+
+.day {
+  background-color: var(--mediumGrey);
+  color: var(--white);
+  padding: 10px;
+  font-size: 10px;
+  font-family: var(--roboto);
+  text-transform: capitalize;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 700;
+}
+/* =================== created workouts ============ */
+.created-workouts {
+  margin-top: 20px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+}
+.workout-info-container {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+/* =========workout styling that will be dealt with in js ========== */
+.one-workout {
+  width: 80vw;
+  height: 50px;
+  background-color: var(--white);
+  border-radius: 3px;
+  font-family: var(--roboto);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: capitalize;
+  margin-bottom: 20px;
+}
+.one-workout i {
+  color: var(--mediumGrey);
+  margin-left: 20px;
+}
+.one-workout p {
+  text-align: center;
+  color: var(--blue);
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+.one-workout span {
+  font-size: 10px;
+  color: var(--blue);
+  opacity: 0.5;
+  margin-right: 20px;
+}
+.created-workouts h2 {
+  font-size: 18px;
+  font-family: var(--roboto);
+  color: var(--white);
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+/* ========================end of workout overview section ======= */
+/* ==============start of chosen exercises section ========== */
+#show-exrecises {
+  transition: 100ms ease-in;
+}
+.exercises-container {
+  margin-top: 20px;
+  width: 100vw;
+  display: none;
+  grid-template-columns: repeat(1, auto);
+  place-items: center;
+}
+
+.one-exercise-container {
+  width: 80vw;
+  position: relative;
+  padding: 10px;
+  background-color: var(--white);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  font-family: var(--roboto);
+  font-size: 12px;
+  color: var(--mediumGrey);
+  text-transform: capitalize;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.container-top-section {
+  width: 70vw;
+  margin-top: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.exercise-general-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-left: -20px;
+
+  width: 55vw;
+}
+.exercise-general-info p {
+  word-wrap: break-word;
+  font-size: 15px;
+}
+.exercise-general-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+}
+.left-span {
+  position: absolute;
+  bottom: -20px;
+  color: var(--blue);
+  left: -20px;
+  font-size: 15px;
+}
+.exercise-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 20px;
+
+  font-size: 12px;
+}
+
+/* ==============exercises input container  ============== */
+
+.exercise-stats-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 75vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.input-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+
+  color: var(--mediumGrey);
+  font-family: var(--roboto);
+}
+
+#sets-input,
+#rest-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--mediumGrey);
+  border: 1px solid var(--blue);
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+#reps-input,
+#tempo-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 40px;
+  color: var(--mediumGrey);
+  border: 1px solid var(--blue);
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.button-type-container {
+  width: 80vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.button-type-container button {
+  margin-bottom: 0;
+}
+.iframe-container {
+  width: 80vw;
+  height: 500px;
+  z-index: 40;
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--white);
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 30px;
+}
+.iframe-container button {
+  width: 50vw;
+  font-size: 20px;
+}
+.iframe {
+  width: 80vw;
+  height: 400px;
+  margin-top: 0;
+}
+
+.note-info {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  border-radius: 3px 3px 0px 0px;
+  left: 0;
+  height: 20px;
+  width: 80vw;
+  padding: 10px;
+  background-color: var(--blue);
+  color: var(--white);
+  font-family: var(--roboto);
+  font-size: 10px;
+}
+
 /* ==============delete verification box =========== */
 .delete-verification-section {
   position: fixed;
@@ -721,4 +1055,8 @@ body {
 .select-role {
   background-color: var(--blue);
   color: var(--white);
+}
+.chosen-day {
+  background-color: var(--white);
+  color: var(--blue);
 }

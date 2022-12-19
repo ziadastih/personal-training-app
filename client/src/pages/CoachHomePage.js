@@ -86,7 +86,7 @@ const CoachHomePage = () => {
           <NavigationBox
             name="program"
             icon={<BiDumbbell />}
-            func={() => navigate(`/program`)}
+            func={() => navigate(`/programs`)}
           />
           <NavigationBox
             name="nutrition"

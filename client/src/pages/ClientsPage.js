@@ -4,9 +4,9 @@ import SearchInput from "../components/SearchInput";
 import RegisterClient from "../components/clientsPageComponent/RegisterClient";
 import { useState, useEffect, useContext } from "react";
 import { PtContext } from "../context/PtContext";
-import { AiOutlinePlus } from "react-icons/ai";
 import { BsFillPlusSquareFill } from "react-icons/bs";
-import OneClient from "../components/OneClient";
+import OneClient from "../components/clientsPageComponent/OneClient";
+import CenterSectionBtn from "../components/CenterSectionBtn";
 import axios from "axios";
 
 // =================Component  =======================
@@ -15,8 +15,7 @@ const ClientsPage = () => {
   const [formState, setFormState] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [clients, setClients] = useState([]);
-  const { dataLength } = useContext(PtContext);
-  const { url } = useContext(PtContext);
+  const { dataLength, url } = useContext(PtContext);
 
   // ====================fetch clients depend on dataLength and searchInput ==================
   useEffect(() => {
@@ -73,12 +72,7 @@ const ClientsPage = () => {
         <BsFillPlusSquareFill />
       </div>
       {clients.length === 0 && (
-        <div className="center-section-btn-container">
-          <h3>create new client</h3>
-          <button className="btn" onClick={toggleForm}>
-            create
-          </button>
-        </div>
+        <CenterSectionBtn name="client" func={toggleForm} />
       )}
 
       <RegisterClient formState={formState} toggleForm={toggleForm} />
