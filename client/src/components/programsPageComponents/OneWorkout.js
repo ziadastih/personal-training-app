@@ -4,6 +4,7 @@ import OneExercice from "../OneExercise";
 
 const OneWorkout = ({ workout }) => {
   const [workoutState, setWorkoutState] = useState(false);
+
   const toggleExercises = () => {
     setWorkoutState((prevState) => !prevState);
   };
@@ -12,9 +13,9 @@ const OneWorkout = ({ workout }) => {
 
   let displayExercise;
   if (exercise) {
-    return (displayExercise = exercise.map((exercise, index) => {
+    displayExercise = exercise.map((exercise, index) => {
       return <OneExercice key={index} exercise={exercise} />;
-    }));
+    });
   }
   return (
     <div className="workout-info-container">
@@ -38,7 +39,8 @@ const OneWorkout = ({ workout }) => {
           {workout.exercises ? workout.exercises.length : "0"} ex
         </span>
       </div>
-      {!workoutState && (
+
+      {workoutState && (
         <div className="exercises-container">{displayExercise}</div>
       )}
     </div>

@@ -1,19 +1,28 @@
+import { useState } from "react";
 import { GiJoin } from "react-icons/gi";
-import { RiSlideshow2Fill } from "react-icons/ri";
+
 import { MdSlideshow } from "react-icons/md";
 import toolImg from "../images/toolsImg.png";
+import IframeContainer from "./Iframe";
 const OneExercice = ({ exercise }) => {
+  const [iframeState, setIframeState] = useState(false);
+
+  const toggleIframe = () => {
+    setIframeState((prevState) => !prevState);
+  };
+
   const styles = {
     position: "absolute",
     bottom: "-22px",
     color: "var(--blue)",
     left: "50%",
-    fontSize: "24px",
+    fontSize: "20px",
     zIndex: "-1",
   };
 
   return (
     <div className="one-exercise-container">
+      {iframeState && <div className="overlay"></div>}
       {exercise.chain && <GiJoin style={styles} />}
       {exercise.chain && <GiJoin style={{ ...styles, left: "45%" }} />}
 
@@ -26,7 +35,10 @@ const OneExercice = ({ exercise }) => {
           {exercise.note.length > 0 && (
             <p className="note-info">{exercise.note}</p>
           )}
-          <MdSlideshow style={{ color: "var(--blue)", fontSize: "22px" }} />
+          <MdSlideshow
+            style={{ color: "var(--blue)", fontSize: "22px" }}
+            onClick={toggleIframe}
+          />
         </div>
       </div>
       <div className="exercise-stats-container">
@@ -56,6 +68,13 @@ const OneExercice = ({ exercise }) => {
           )}
         </div>
       </div>
+      {exercise.video && (
+        <IframeContainer
+          toggleIframe={toggleIframe}
+          videoSrc={exercise.video}
+          iframeState={iframeState}
+        />
+      )}
     </div>
   );
 };

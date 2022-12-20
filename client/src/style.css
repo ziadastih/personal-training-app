@@ -90,9 +90,10 @@ input {
   justify-content: space-evenly;
   bottom: 0;
   left: 0;
+  z-index: 10;
 }
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -794,10 +795,7 @@ body {
   text-transform: capitalize;
   margin-bottom: 20px;
 }
-.one-workout i {
-  color: var(--mediumGrey);
-  margin-left: 20px;
-}
+
 .one-workout p {
   text-align: center;
   color: var(--blue);
@@ -1059,6 +1057,9 @@ body {
 /* =====================js  =================== */
 .display-flex {
   display: flex;
+}
+.display-grid {
+  display: grid;
 }
 .select-role {
   background-color: var(--blue);
