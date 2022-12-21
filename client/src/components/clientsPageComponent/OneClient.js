@@ -4,7 +4,7 @@ import { PtContext } from "../../context/PtContext";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import DeleteVerification from "../DeleteVerification";
 // ================== One Client component ==============
 
 const OneClient = ({ name, id, date }) => {
@@ -60,21 +60,11 @@ const OneClient = ({ name, id, date }) => {
       </div>
 
       {verificationState && (
-        <div className="delete-verification-section">
-          <div className="delete-verification-box">
-            <h3>
-              Are you sure you want to delete <span>{name}</span> ?
-            </h3>
-            <div className="yes-no-container">
-              <button className="yes-btn" onClick={deleteUser}>
-                yes
-              </button>
-              <button className="no-btn" onClick={toggleBox}>
-                no
-              </button>
-            </div>
-          </div>
-        </div>
+        <DeleteVerification
+          name={name}
+          deleteFunc={deleteUser}
+          toggleBox={toggleBox}
+        />
       )}
     </div>
   );

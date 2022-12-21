@@ -1,37 +1,63 @@
 import { BiDumbbell } from "react-icons/bi";
-import { BsFillPlusSquareFill } from "react-icons/bs";
+import { BsFillPlusSquareFill, BsDot } from "react-icons/bs";
 import PageHeader from "../components/PageHeader";
 import SearchInput from "../components/SearchInput";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { PtContext } from "../context/PtContext";
 import CenterSectionBtn from "../components/CenterSectionBtn";
 import { useNavigate } from "react-router-dom";
+
 import OneProgram from "../components/programsPageComponents/OneProgram";
 import axios from "axios";
 // ================Programs Page =================
 
 const ProgramsPage = () => {
+  const dotRef = useRef();
   const [searchInput, setSearchInput] = useState("");
+  const effectRan = useRef(false);
   const [page, setPage] = useState(0);
   const [programs, setPrograms] = useState([]);
   const { dataLength, url } = useContext(PtContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      const { data } = await axios.get(
-        `${url}/api/v1/workoutProgram/?page=${page}`,
-        { withCredentials: true }
-      );
-      setPrograms((prevPrograms) => {
-        return prevPrograms, data.workoutprograms;
-      });
-    };
+    if (effectRan.current === false) {
+      const fetchWorkouts = async () => {
+        const { data } = await axios.get(
+          `${url}/api/v1/workoutProgram/?page=${page}`,
+          { withCredentials: true }
+        );
+        let newPrograms = data.workoutprograms;
+        console.log(newPrograms);
+        setPrograms((prevPrograms) => {
+          return [...prevPrograms, ...newPrograms];
+        });
+      };
 
-    fetchWorkouts();
+      fetchWorkouts();
+      return () => (effectRan.current = true);
+    }
   }, [dataLength, searchInput, page]);
 
-  console.log(programs);
+  // ====================observer ========================
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(async (entry) => {
+        if (entry.isIntersecting) {
+          increasePage();
+        }
+      });
+    });
+    observer.observe(dotRef.current);
+  }, []);
+
+  const increasePage = () => {
+    effectRan.current = false;
+    setPage((prevPage) => prevPage + 1);
+    console.log("observing");
+  };
+
   // =============update search input on Change ===========
 
   const updateSearch = (e) => {
@@ -56,7 +82,10 @@ const ProgramsPage = () => {
           func={() => navigate("/createProgram")}
         />
       )}
-      <div className="grid-col-container">{programsArr}</div>
+      <div className="grid-col-container">
+        {programsArr}
+        <span className="fetch-more" ref={dotRef}></span>
+      </div>
     </div>
   );
 };

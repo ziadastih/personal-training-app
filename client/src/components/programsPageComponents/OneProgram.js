@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEditNote } from "react-icons/md";
 import {
@@ -8,12 +8,20 @@ import {
 } from "react-icons/bs";
 import OneWorkout from "./OneWorkout";
 import useDays from "../../customHooks/DaysHook";
-
+import DeleteVerification from "../DeleteVerification";
+import axios from "axios";
+import { PtContext } from "../../context/PtContext";
 const OneProgram = ({ program }) => {
   const [overviewState, setOverviewState] = useState(false);
+  const [verificationState, setVerificationState] = useState(false);
+  const { url, dataLength, decreaseData } = useContext(PtContext);
   const { daysArr, currentDay } = useDays();
   const [workoutsArr, setWorkoutsArr] = useState([]);
   const navigate = useNavigate();
+
+  const toggleBox = () => {
+    setVerificationState((prevState) => !prevState);
+  };
 
   const toggleOverview = () => {
     setOverviewState((prevState) => !prevState);
@@ -26,6 +34,32 @@ const OneProgram = ({ program }) => {
   const displayWorkouts = workoutsArr.map((workout, index) => {
     return <OneWorkout key={index} workout={workout} />;
   });
+
+  const deleteProgram = async () => {
+    try {
+      const data = await axios.delete(
+        `${url}/api/v1/workoutProgram/${program._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      decreaseData(1);
+
+      const updateData = await axios.patch(
+        `${url}/api/v1/dataLength`,
+
+        { workoutLength: dataLength[1].value - 1 },
+        {
+          withCredentials: true,
+        }
+      );
+
+      toggleBox();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div
@@ -59,7 +93,7 @@ const OneProgram = ({ program }) => {
             style={{ fontSize: "25px" }}
             onClick={() => navigate(`/program/${program._id}`)}
           />
-          <BsFillTrashFill />
+          <BsFillTrashFill onClick={toggleBox} />
         </div>
       </div>
 
@@ -84,6 +118,13 @@ const OneProgram = ({ program }) => {
             )}
           </div>
         </div>
+      )}
+      {verificationState && (
+        <DeleteVerification
+          name={program.name}
+          deleteFunc={deleteProgram}
+          toggleBox={toggleBox}
+        />
       )}
     </div>
   );
