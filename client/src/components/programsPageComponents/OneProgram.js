@@ -11,6 +11,9 @@ import useDays from "../../customHooks/DaysHook";
 import DeleteVerification from "../DeleteVerification";
 import axios from "axios";
 import { PtContext } from "../../context/PtContext";
+
+// ================component ============================
+
 const OneProgram = ({ program }) => {
   const [overviewState, setOverviewState] = useState(false);
   const [verificationState, setVerificationState] = useState(false);

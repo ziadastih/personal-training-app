@@ -42,7 +42,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 server.use(
   cors({
-    origin: "http://192.168.1.195:3000",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
@@ -81,7 +81,7 @@ server.use(errorHandlerMiddleware);
 const start = async () => {
   try {
     await connectDB(process.env.PT_URI);
-    server.listen(5000, "192.168.1.195", () => {
+    server.listen(5000, () => {
       console.log("server is listening");
     });
   } catch (error) {

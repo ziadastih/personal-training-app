@@ -6,63 +6,64 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { PtContext } from "../context/PtContext";
 import CenterSectionBtn from "../components/CenterSectionBtn";
 import { useNavigate } from "react-router-dom";
-
+import { useInView } from "react-intersection-observer";
 import OneProgram from "../components/programsPageComponents/OneProgram";
 import axios from "axios";
 // ================Programs Page =================
 
 const ProgramsPage = () => {
-  const dotRef = useRef();
+  const { ref: dotRef, inView } = useInView();
+
   const [searchInput, setSearchInput] = useState("");
-  const effectRan = useRef(false);
+  // const effectRan = useRef(false);
+  const [effectView, setEffectRan] = useState(false);
   const [page, setPage] = useState(0);
+
   const [programs, setPrograms] = useState([]);
   const { dataLength, url } = useContext(PtContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (effectRan.current === false) {
-      const fetchWorkouts = async () => {
-        const { data } = await axios.get(
-          `${url}/api/v1/workoutProgram/?page=${page}`,
-          { withCredentials: true }
-        );
-        let newPrograms = data.workoutprograms;
-        console.log(newPrograms);
-        setPrograms((prevPrograms) => {
-          return [...prevPrograms, ...newPrograms];
-        });
+    if (!effectView) {
+      const fetchPrograms = async () => {
+        try {
+          const { data } = await axios.get(
+            `${url}/api/v1/workoutProgram/?page=${page}`,
+            { withCredentials: true }
+          );
+          let newPrograms = data.workoutprograms;
+
+          setPrograms((prevPrograms) => {
+            return [...prevPrograms, ...newPrograms];
+          });
+        } catch (error) {
+          console.log(error);
+        }
       };
 
-      fetchWorkouts();
-      return () => (effectRan.current = true);
+      fetchPrograms();
+      return () => setEffectRan(true);
     }
-  }, [dataLength, searchInput, page]);
-
-  // ====================observer ========================
+  }, [page]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(async (entry) => {
-        if (entry.isIntersecting) {
-          increasePage();
-        }
-      });
-    });
-    observer.observe(dotRef.current);
+    if (inView) {
+      console.log("clear");
+      setPage((prevPage) => prevPage + 1);
+      setEffectRan(false);
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    const fetchedAll = dataLength[1].value === programs.length;
+    return fetchedAll ? "true" : "false";
   }, []);
-
-  const increasePage = () => {
-    effectRan.current = false;
-    setPage((prevPage) => prevPage + 1);
-    console.log("observing");
-  };
-
   // =============update search input on Change ===========
 
   const updateSearch = (e) => {
     setSearchInput(e.target.value);
   };
+  // ============= programs arr and searched programs arr =============
 
   const programsArr = programs.map((prog) => {
     return <OneProgram key={prog._id} program={prog} />;
@@ -84,7 +85,10 @@ const ProgramsPage = () => {
       )}
       <div className="grid-col-container">
         {programsArr}
-        <span className="fetch-more" ref={dotRef}></span>
+
+        {programs.length > 0 && (
+          <span className="fetch-more" ref={dotRef}></span>
+        )}
       </div>
     </div>
   );

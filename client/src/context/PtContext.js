@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from "react";
 const PtContext = createContext();
 
 const PtContextProvider = (props) => {
-  const url = "http://192.168.1.195:5000";
+  const url = "http://localhost:5000";
   // ============= user state and dataLength state  =======================
 
   const [user, setUser] = useState({
