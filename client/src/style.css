@@ -3,7 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 :root {
   --roboto: "Roboto", sans-serif;
 
@@ -178,7 +180,6 @@ body {
 
   height: 100vh;
   width: 100vw;
-  overflow-x: hidden;
 }
 
 .App {
@@ -1074,5 +1075,5 @@ body {
   width: 2px;
   height: 2px;
   border-radius: 50%;
-  background-color: var(--white);
+  background-color: var(--darkGrey);
 }

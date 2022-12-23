@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEditNote } from "react-icons/md";
 import {
@@ -14,7 +14,7 @@ import { PtContext } from "../../context/PtContext";
 
 // ================component ============================
 
-const OneProgram = ({ program }) => {
+const OneProgram = React.forwardRef(({ program }, ref) => {
   const [overviewState, setOverviewState] = useState(false);
   const [verificationState, setVerificationState] = useState(false);
   const { url, dataLength, decreaseData } = useContext(PtContext);
@@ -64,12 +64,8 @@ const OneProgram = ({ program }) => {
     }
   };
 
-  return (
-    <div
-      className={
-        overviewState ? "program-container border-bottom" : "program-container"
-      }
-    >
+  const programBody = (
+    <>
       <div className="program">
         {!overviewState && (
           <BsArrowsExpand
@@ -129,7 +125,21 @@ const OneProgram = ({ program }) => {
           toggleBox={toggleBox}
         />
       )}
-    </div>
+    </>
   );
-};
+
+  const programBorder = overviewState
+    ? "program-container border-bottom"
+    : "program-container";
+
+  const programContent = ref ? (
+    <div className={programBorder} ref={ref}>
+      {programBody}
+    </div>
+  ) : (
+    <div className={programBorder}>{programBody}</div>
+  );
+
+  return programContent;
+});
 export default OneProgram;

@@ -1,63 +1,41 @@
 import { BiDumbbell } from "react-icons/bi";
-import { BsFillPlusSquareFill, BsDot } from "react-icons/bs";
+import { BsFillPlusSquareFill } from "react-icons/bs";
 import PageHeader from "../components/PageHeader";
 import SearchInput from "../components/SearchInput";
-import { useContext, useEffect, useRef, useState } from "react";
-import { PtContext } from "../context/PtContext";
+import { useRef, useState, useCallback } from "react";
 import CenterSectionBtn from "../components/CenterSectionBtn";
 import { useNavigate } from "react-router-dom";
-import { useInView } from "react-intersection-observer";
 import OneProgram from "../components/programsPageComponents/OneProgram";
-import axios from "axios";
+import usePrograms from "../customHooks/usePrograms";
+
 // ================Programs Page =================
 
 const ProgramsPage = () => {
-  const { ref: dotRef, inView } = useInView();
-
   const [searchInput, setSearchInput] = useState("");
-  // const effectRan = useRef(false);
-  const [effectView, setEffectRan] = useState(false);
-  const [page, setPage] = useState(0);
-
-  const [programs, setPrograms] = useState([]);
-  const { dataLength, url } = useContext(PtContext);
   const navigate = useNavigate();
+  const [pageNum, setPageNum] = useState(0);
+  const { isLoading, hasNextPage, results } = usePrograms(pageNum);
 
-  useEffect(() => {
-    if (!effectView) {
-      const fetchPrograms = async () => {
-        try {
-          const { data } = await axios.get(
-            `${url}/api/v1/workoutProgram/?page=${page}`,
-            { withCredentials: true }
-          );
-          let newPrograms = data.workoutprograms;
+  const intObserver = useRef();
 
-          setPrograms((prevPrograms) => {
-            return [...prevPrograms, ...newPrograms];
-          });
-        } catch (error) {
-          console.log(error);
+  const lastProgramRef = useCallback(
+    (prog) => {
+      if (isLoading) return;
+
+      if (intObserver.current) intObserver.current.disconnect();
+
+      intObserver.current = new IntersectionObserver((progs) => {
+        if (progs[0].isIntersecting && hasNextPage) {
+          console.log("we are near the last post!");
+          setPageNum((prev) => prev + 1);
         }
-      };
+      });
+      if (prog) intObserver.current.observe(prog);
+    },
 
-      fetchPrograms();
-      return () => setEffectRan(true);
-    }
-  }, [page]);
+    [isLoading, hasNextPage]
+  );
 
-  useEffect(() => {
-    if (inView) {
-      console.log("clear");
-      setPage((prevPage) => prevPage + 1);
-      setEffectRan(false);
-    }
-  }, [inView]);
-
-  useEffect(() => {
-    const fetchedAll = dataLength[1].value === programs.length;
-    return fetchedAll ? "true" : "false";
-  }, []);
   // =============update search input on Change ===========
 
   const updateSearch = (e) => {
@@ -65,8 +43,18 @@ const ProgramsPage = () => {
   };
   // ============= programs arr and searched programs arr =============
 
-  const programsArr = programs.map((prog) => {
-    return <OneProgram key={prog._id} program={prog} />;
+  const programsArr = results.map((prog, i) => {
+    if (results.length === i + 1) {
+      return (
+        <OneProgram
+          ref={lastProgramRef}
+          key={crypto.randomUUID()}
+          program={prog}
+        />
+      );
+    }
+
+    return <OneProgram key={crypto.randomUUID()} program={prog} />;
   });
 
   //   ======================program Page html ====================
@@ -77,7 +65,7 @@ const ProgramsPage = () => {
       <div className="plus-btn" onClick={() => navigate("/createProgram")}>
         <BsFillPlusSquareFill />
       </div>
-      {programs.length === 0 && (
+      {programsArr.length === 0 && (
         <CenterSectionBtn
           name="program"
           func={() => navigate("/createProgram")}
@@ -85,10 +73,7 @@ const ProgramsPage = () => {
       )}
       <div className="grid-col-container">
         {programsArr}
-
-        {programs.length > 0 && (
-          <span className="fetch-more" ref={dotRef}></span>
-        )}
+        {isLoading && <p>loading...</p>}
       </div>
     </div>
   );
