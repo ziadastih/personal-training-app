@@ -1,5 +1,4 @@
 const IframeContainer = ({ iframeState, videoSrc, toggleIframe }) => {
-  console.log(videoSrc);
   return (
     <div
       className={

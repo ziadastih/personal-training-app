@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEditNote } from "react-icons/md";
 import {
@@ -9,16 +9,12 @@ import {
 import OneWorkout from "./OneWorkout";
 import useDays from "../../customHooks/DaysHook";
 import DeleteVerification from "../DeleteVerification";
-import axios from "axios";
-import { PtContext } from "../../context/PtContext";
 
-// ================component ============================
-// ========set forwardref to give a ref for it
+// ================OneProgram Component============================
 
 const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
   const [overviewState, setOverviewState] = useState(false);
   const [verificationState, setVerificationState] = useState(false);
-  const { url, dataLength, decreaseData } = useContext(PtContext);
   const { daysArr, currentDay } = useDays();
   const [workoutsArr, setWorkoutsArr] = useState([]);
   const navigate = useNavigate();
@@ -41,33 +37,6 @@ const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
   const displayWorkouts = workoutsArr.map((workout, index) => {
     return <OneWorkout key={index} workout={workout} />;
   });
-
-  // =============delete program ==================
-  const deleteProgram = async () => {
-    try {
-      const data = await axios.delete(
-        `${url}/api/v1/workoutProgram/${program._id}`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      decreaseData(1);
-      removeProgram(program._id);
-      const updateData = await axios.patch(
-        `${url}/api/v1/dataLength`,
-
-        { workoutLength: dataLength[1].value - 1 },
-        {
-          withCredentials: true,
-        }
-      );
-
-      toggleBox();
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
 
   // ===========add border when overview is true ==================
   const programBorder = overviewState
@@ -134,8 +103,11 @@ const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
       {verificationState && (
         <DeleteVerification
           name={program.name}
-          deleteFunc={deleteProgram}
           toggleBox={toggleBox}
+          route="workoutProgram"
+          index={1}
+          _id={program._id}
+          removeProgram={removeProgram}
         />
       )}
     </div>

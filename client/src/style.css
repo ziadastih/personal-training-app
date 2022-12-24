@@ -543,7 +543,7 @@ body {
   padding: 10px;
   border-radius: 3px;
 }
-
+/* ==================navigation main container ============ */
 .navigation-main-container {
   display: flex;
   align-items: center;
@@ -617,15 +617,8 @@ body {
   font-size: 15px;
   opacity: 0.8;
 }
-#search-icon-btn {
-  position: absolute;
-  right: 15vw;
 
-  color: var(--white);
-  opacity: 0.8;
-}
-
-/* ====================Start of clients page ================= */
+/* ==============grid container ===================== */
 .grid-col-container {
   margin-top: 20px;
   display: grid;
@@ -636,6 +629,8 @@ body {
   width: 100vw;
   margin-bottom: 9vh;
 }
+
+/* ====================Start of clients page ================= */
 
 .client {
   width: 80vw;
@@ -1003,6 +998,81 @@ body {
   font-size: 10px;
 }
 
+/* ========Start of diets Page ============= */
+.one-diet-container {
+  margin-bottom: 20px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.diet {
+  width: 80vw;
+  height: 50px;
+  background-color: var(--white);
+  color: var(--mediumGrey);
+  border-radius: 3px 3px 0px 0px;
+
+  font-family: var(--roboto);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: capitalize;
+}
+
+.diet p {
+  text-align: center;
+
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  margin-left: 20px;
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--blue);
+  width: 70px;
+
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+/* ==============meal macros container ================ */
+
+.total-diet-macros {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  border-radius: 0px 0px 3px 3px;
+  width: 80vw;
+  background-color: var(--white);
+
+  height: 80px;
+  padding: 5px;
+  font-family: var(--roboto);
+  color: var(--mediumGrey);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.macros-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+.macros-info span {
+  opacity: 0.5;
+  font-size: 10px;
+  color: var(--blue);
+}
+
 /* ==============delete verification box =========== */
 .delete-verification-section {
   position: fixed;
@@ -1085,11 +1155,4 @@ body {
 .chosen-day {
   background-color: var(--white);
   color: var(--blue);
-}
-
-.fetch-more {
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  background-color: var(--darkGrey);
 }

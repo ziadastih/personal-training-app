@@ -16,7 +16,7 @@ const SearchInput = ({ name, update, value }) => {
       <input
         type="search"
         className="search-input"
-        placeholder={`search ${name}`}
+        placeholder={`search for ${name}`}
         autoComplete="off"
         value={value}
         onChange={update}

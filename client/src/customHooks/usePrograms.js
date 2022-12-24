@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { PtContext } from "../context/PtContext";
 
-const usePrograms = (pageNum = 0, workoutProgram) => {
+const usePrograms = (pageNum = 0, collection) => {
   const [programs, setPrograms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -26,14 +26,20 @@ const usePrograms = (pageNum = 0, workoutProgram) => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(
-          `${url}/api/v1/${workoutProgram}/?page=${pageNum}`,
+          `${url}/api/v1/${collection}/?page=${pageNum}`,
 
           { withCredentials: true }
         );
 
-        setPrograms((prev) => [...prev, ...data.workoutprograms]);
+        if (collection === "workoutProgram") {
+          setPrograms((prev) => [...prev, ...data.workoutprograms]);
 
-        setHasNextPage(Boolean(data.workoutprograms.length));
+          setHasNextPage(Boolean(data.workoutprograms.length));
+        } else if (collection === "diet") {
+          setPrograms((prev) => [...prev, ...data.diets]);
+
+          setHasNextPage(Boolean(data.diets.length));
+        }
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);

@@ -11,6 +11,7 @@ const useDays = () => {
     { name: "sat", isSelected: false, index: 5 },
     { name: "sun", isSelected: false, index: 6 },
   ]);
+
   let currentDay = day.filter((day) => {
     return day.isSelected === true;
   });

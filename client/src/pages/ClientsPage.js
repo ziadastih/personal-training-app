@@ -9,7 +9,7 @@ import OneClient from "../components/clientsPageComponent/OneClient";
 import CenterSectionBtn from "../components/CenterSectionBtn";
 import axios from "axios";
 
-// =================Component  =======================
+// =================ClientPage Component  =======================
 
 const ClientsPage = () => {
   const [formState, setFormState] = useState(false);

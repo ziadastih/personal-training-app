@@ -1,27 +1,27 @@
-import { BiDumbbell } from "react-icons/bi";
 import { BsFillPlusSquareFill } from "react-icons/bs";
+import { GiMeal } from "react-icons/gi";
 import PageHeader from "../components/PageHeader";
 import SearchInput from "../components/SearchInput";
 import { useRef, useState, useCallback, useEffect, useContext } from "react";
 import CenterSectionBtn from "../components/CenterSectionBtn";
 import { useNavigate } from "react-router-dom";
-import OneProgram from "../components/programsPageComponents/OneProgram";
+import OneDiet from "../components/dietsPageComponent/OneDiet";
 import usePrograms from "../customHooks/usePrograms";
 import { BiLoaderCircle } from "react-icons/bi";
 import axios from "axios";
 import { PtContext } from "../context/PtContext";
-// ================Programs Page =================
 
-const ProgramsPage = () => {
+const NutritionPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchedPrograms, setSearchedPrograms] = useState([]);
-  const navigate = useNavigate();
   const [pageNum, setPageNum] = useState(0);
+  const { url } = useContext(PtContext);
   const { isLoading, hasNextPage, programs, removeProgram } = usePrograms(
     pageNum,
-    "workoutProgram"
+    "diet"
   );
-  const { url } = useContext(PtContext);
+
+  const navigate = useNavigate();
 
   // =================use effect for search ====================
 
@@ -30,11 +30,11 @@ const ProgramsPage = () => {
       const searchPrograms = async () => {
         try {
           const { data } = await axios.get(
-            `${url}/api/v1/workoutProgram/?name=${searchInput}`,
+            `${url}/api/v1/diet/?name=${searchInput}`,
             { withCredentials: true }
           );
 
-          setSearchedPrograms(data.workoutprograms);
+          setSearchedPrograms(data.diets);
         } catch (error) {
           console.log(error);
         }
@@ -50,10 +50,16 @@ const ProgramsPage = () => {
   };
   // ===============searched programs array ==================
   const searchedValuesArr = searchedPrograms.map((prog) => {
-    return <OneProgram key={crypto.randomUUID()} program={prog} />;
+    return (
+      <OneDiet
+        key={crypto.randomUUID()}
+        diet={prog}
+        removeProgram={removeProgram}
+      />
+    );
   });
 
-  // ===============intersection observer with the ref ========================
+  // ============== intersection observer, disconnecting and setting a new one on each render depend if there are more data to fetch ====================
 
   const observer = useRef();
 
@@ -70,46 +76,40 @@ const ProgramsPage = () => {
       });
       if (prog) observer.current.observe(prog);
     },
-
     [isLoading, hasNextPage]
   );
 
-  // ============= programs arr  =============
-
+  // ================displaying programs the last one with ref so we fetch more data when intersecting  ==================
   const programsArr = programs.map((prog, i) => {
     if (programs.length === i + 1) {
       return (
-        <OneProgram
-          ref={lastProgramRef}
+        <OneDiet
           key={crypto.randomUUID()}
-          program={prog}
+          diet={prog}
+          ref={lastProgramRef}
           removeProgram={removeProgram}
         />
       );
     }
-
     return (
-      <OneProgram
+      <OneDiet
         key={crypto.randomUUID()}
-        program={prog}
+        diet={prog}
         removeProgram={removeProgram}
       />
     );
   });
 
-  //   ======================program Page html ====================
+  //=========html ======================
   return (
     <div className="all-pages-bg">
-      <PageHeader name="programs" icon={<BiDumbbell />} />
-      <SearchInput name="programs" update={updateSearch} value={searchInput} />
-      <div className="plus-btn" onClick={() => navigate("/createProgram")}>
+      <PageHeader name="diets" icon={<GiMeal />} />
+      <SearchInput name="diets" update={updateSearch} value={searchInput} />
+      <div className="plus-btn" onClick={() => navigate("/createDiet")}>
         <BsFillPlusSquareFill />
       </div>
       {programsArr.length === 0 && (
-        <CenterSectionBtn
-          name="program"
-          func={() => navigate("/createProgram")}
-        />
+        <CenterSectionBtn name="diet" func={() => navigate("/createDiet")} />
       )}
       <div className="grid-col-container">
         {searchInput.length > 0 ? searchedValuesArr : programsArr}
@@ -119,4 +119,4 @@ const ProgramsPage = () => {
   );
 };
 
-export default ProgramsPage;
+export default NutritionPage;

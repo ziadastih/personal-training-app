@@ -24,9 +24,9 @@ const getAllDiets = async (req, res) => {
     queryObject.name = { $regex: name, $options: "i" };
     queryObject.createdBy = req.coach.coachId;
 
-    const diet = await Diet.find(queryObject).lean();
+    const diets = await Diet.find(queryObject).lean();
 
-    res.status(StatusCodes.OK).json({ diet });
+    res.status(StatusCodes.OK).json({ diets });
   }
 
   if (page) {

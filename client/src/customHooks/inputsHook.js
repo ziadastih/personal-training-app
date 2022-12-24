@@ -55,7 +55,7 @@ const useInputs = (value) => {
     return res.test(emailValue);
   };
 
-  // ===========validate inputs and submit request on the api, depend on the inputs we have  =======================
+  // ===========validate inputs and submit request to the api, depend on the inputs we have  =======================
 
   const validateInputs = async () => {
     const values = inputsValue.map((input) => {
@@ -120,7 +120,7 @@ const useInputs = (value) => {
             withCredentials: true,
           }
         );
-        console.log(updateData);
+
         resetInputs();
       } catch (error) {
         console.log(error);

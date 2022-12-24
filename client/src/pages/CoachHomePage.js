@@ -91,7 +91,7 @@ const CoachHomePage = () => {
           <NavigationBox
             name="nutrition"
             icon={<GiMeal />}
-            func={() => navigate(`/nutrition`)}
+            func={() => navigate(`/diets`)}
           />
         </div>
       </div>
