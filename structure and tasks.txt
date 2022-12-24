@@ -42,8 +42,12 @@ TASKS:
 
 3_coachHomepage:
             1_clear maybe change design
-            2_either fetch coach again or set it in localStorage or session storage so whenever i refresh data will not lost 
+           
 
 4_clients:  
-            1_need to setup a client input to map over clients and send props through it 
-             
+            1_clear , skip pagination cz average coaches will have 10-30 clients at best so it will load them real fast 
+
+5_programsPage:
+            1_ need to fix the bug when searching and deleting to reset  the array 
+            2_set the loading when we search
+

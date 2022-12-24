@@ -13,14 +13,17 @@ import axios from "axios";
 import { PtContext } from "../../context/PtContext";
 
 // ================component ============================
+// ========set forwardref to give a ref for it
 
-const OneProgram = React.forwardRef(({ program }, ref) => {
+const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
   const [overviewState, setOverviewState] = useState(false);
   const [verificationState, setVerificationState] = useState(false);
   const { url, dataLength, decreaseData } = useContext(PtContext);
   const { daysArr, currentDay } = useDays();
   const [workoutsArr, setWorkoutsArr] = useState([]);
   const navigate = useNavigate();
+
+  // ===========toggle functions =================
 
   const toggleBox = () => {
     setVerificationState((prevState) => !prevState);
@@ -29,15 +32,17 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
   const toggleOverview = () => {
     setOverviewState((prevState) => !prevState);
   };
-
+  // ================use effect to get the current workouts depend on the current day
   useEffect(() => {
     setWorkoutsArr(program.weeks[0].days[currentDay[0].index].workouts);
   }, [currentDay]);
 
+  // ===========display the workouts =====================
   const displayWorkouts = workoutsArr.map((workout, index) => {
     return <OneWorkout key={index} workout={workout} />;
   });
 
+  // =============delete program ==================
   const deleteProgram = async () => {
     try {
       const data = await axios.delete(
@@ -48,7 +53,7 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
       );
 
       decreaseData(1);
-
+      removeProgram(program._id);
       const updateData = await axios.patch(
         `${url}/api/v1/dataLength`,
 
@@ -64,8 +69,15 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
     }
   };
 
-  const programBody = (
-    <>
+  // ===========add border when overview is true ==================
+  const programBorder = overviewState
+    ? "program-container border-bottom"
+    : "program-container";
+
+  // ===========one program html =====================
+
+  return (
+    <div className={programBorder} ref={ref ?? ref}>
       <div className="program">
         {!overviewState && (
           <BsArrowsExpand
@@ -118,6 +130,7 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
           </div>
         </div>
       )}
+      {/* ==================verification component =================== */}
       {verificationState && (
         <DeleteVerification
           name={program.name}
@@ -125,21 +138,7 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
           toggleBox={toggleBox}
         />
       )}
-    </>
-  );
-
-  const programBorder = overviewState
-    ? "program-container border-bottom"
-    : "program-container";
-
-  const programContent = ref ? (
-    <div className={programBorder} ref={ref}>
-      {programBody}
     </div>
-  ) : (
-    <div className={programBorder}>{programBody}</div>
   );
-
-  return programContent;
 });
 export default OneProgram;
