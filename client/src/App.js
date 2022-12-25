@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 import NavBar from "./components/NavBar";
 import NutritionPage from "./pages/NutritionPage";
+import CreateProgramPage from "./pages/CreateProgramPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/clients" element={<ClientsPage />} />
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/diets" element={<NutritionPage />} />
+        <Route path="/createProgram" element={<CreateProgramPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <NavBar />

@@ -87,6 +87,7 @@ input {
   justify-content: center;
   border: none;
 }
+
 .full-btn {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -95,6 +96,18 @@ input {
   color: var(--white);
   border-radius: 5px;
   border: none;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.outline-btn {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: transparent;
+  color: var(--white);
+  border-radius: 5px;
+  border: 1px solid var(--blue);
   text-transform: capitalize;
   cursor: pointer;
 }
@@ -1071,6 +1084,14 @@ body {
   opacity: 0.5;
   font-size: 10px;
   color: var(--blue);
+}
+
+/* ====================== start of create Program ============= */
+.create-btns {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 /* ==============delete verification box =========== */

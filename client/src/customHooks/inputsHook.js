@@ -25,7 +25,8 @@ const useInputs = (value) => {
           { name: "email", value: "", type: "text", alert: false },
           { name: "password", value: "", type: "password", alert: false },
         ]
-      : [
+      : value === "client"
+      ? [
           {
             name: "first name",
             value: "",
@@ -36,6 +37,9 @@ const useInputs = (value) => {
           { name: "email", value: "", type: "text", alert: false },
           { name: "number", value: "", type: "number", alert: false },
         ]
+      : value === "program name"
+      ? [{ name: "program name", value: "", type: "text", alert: false }]
+      : [{ name: "workout name", value: "", type: "text", alert: false }]
   );
   const { url, increaseData, dataLength } = useContext(PtContext);
 
