@@ -3,7 +3,8 @@ import useDays from "../customHooks/DaysHook";
 import { useContext, useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import NameBox from "../components/createProgram/NameBox";
-
+import exercisesList from "../fixedData,/exercisesList.json";
+import ListContainer from "../components/ListContainer";
 // ============Page Component  ================
 const CreateProgramPage = () => {
   const [formsState, setFormsState] = useState([
@@ -15,9 +16,18 @@ const CreateProgramPage = () => {
       name: "workout name",
       toggle: false,
     },
+    {
+      name: "exercises list",
+      toggle: false,
+    },
+    {
+      name: "exercise name",
+      toggle: false,
+    },
   ]);
-  const [programName, setProgramName] = useState("");
+  const [originalList] = useState(exercisesList);
 
+  const [programName, setProgramName] = useState("");
   // ===========assign program name sent by props tp submit btn  =========
   const assignProgramName = (name) => {
     setProgramName(name);
@@ -63,6 +73,7 @@ const CreateProgramPage = () => {
         toggleForm={toggleForm}
         assignName={assignProgramName}
       />
+      <ListContainer name="exercises" originalList={originalList} />
     </div>
   );
 };

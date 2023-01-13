@@ -3,7 +3,6 @@ import { createContext, useState, useEffect } from "react";
 const PtContext = createContext();
 
 const PtContextProvider = (props) => {
-  const url = "http://localhost:5000";
   // ============= user state and dataLength state  =======================
 
   const [user, setUser] = useState({
@@ -121,7 +120,6 @@ const PtContextProvider = (props) => {
       value={{
         user,
         updateUser,
-        url,
         resetUser,
         setOriginalData,
         dataLength,

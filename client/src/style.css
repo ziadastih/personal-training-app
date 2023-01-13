@@ -1094,6 +1094,119 @@ body {
   justify-content: space-around;
 }
 
+/* =======================list container ============= */
+.list-container {
+  width: 100vw;
+  height: 60vh;
+  position: fixed;
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  z-index: 999;
+}
+/* ==============the sub container which has all the content */
+.list-content-container {
+  width: 80vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(--white);
+  border-radius: 5px;
+}
+/* ===================add exercises header , has the title of the container and the close btn  */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70vw;
+  color: var(--blue);
+  font-family: var(--fontSansSerif);
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 15px;
+
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.exercises-input-container i {
+  position: absolute;
+  font-size: 10px;
+  margin-left: -30px;
+  margin-top: 15px;
+  color: var(--mediumGrey);
+}
+
+.list-input {
+  width: 70vw;
+  background-color: transparent;
+  border: 1px solid var(--mediumGrey);
+}
+
+.list-split-line {
+  width: 70vw;
+  background-color: var(--mediumGrey);
+  height: 1px;
+  opacity: 0.3;
+  margin-top: 20px;
+}
+
+/* ===============exercise container ================= */
+
+.list {
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height: 300px;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-top: 20px;
+  overflow-y: scroll;
+  position: relative;
+  gap: 20px;
+}
+
+.item-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: 70vw;
+  height: 40px;
+  font-family: var(--fontSansSerif);
+  color: var(--mediumGrey);
+  font-size: 12px;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+.item-name {
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+  width: 50vw;
+  text-align: start;
+
+  word-wrap: break-word;
+
+  height: 40px;
+}
+
+.item-img {
+  width: 50px;
+  height: 50px;
+}
+
+/* ----------exercises  btn container flex align center ===== */
+.list-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 70vw;
+}
+
 /* ==============delete verification box =========== */
 .delete-verification-section {
   position: fixed;

@@ -46,6 +46,7 @@ TASKS:
 
 4_clients:  
             1_clear , skip pagination cz average coaches will have 10-30 clients at best so it will load them real fast 
+            2_add loader when page load or on delete client
 
 5_programsPage:
             1_ need to fix the bug when searching and deleting to reset  the array 

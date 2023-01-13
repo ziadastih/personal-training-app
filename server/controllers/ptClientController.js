@@ -8,17 +8,8 @@ const { BadRequestError, NotFoundError } = require("../errors");
 
 // =================get all clients with certain query === ============
 const getallClients = async (req, res) => {
-  const { name, count, length } = req.query;
+  const { name } = req.query;
   const queryObject = {};
-
-  if (length) {
-    const client = await Client.find({
-      createdBy: req.coach.coachId,
-    });
-    let number = client.length;
-
-    res.status(StatusCodes.OK).json({ number });
-  }
 
   if (name) {
     queryObject.firstName = { $regex: name, $options: "i" };
@@ -36,9 +27,7 @@ const getallClients = async (req, res) => {
       };
     });
     res.status(StatusCodes.OK).json({ clientsInfo });
-  }
-
-  if (count) {
+  } else {
     const clients = await Client.find({ createdBy: req.coach.coachId });
     const clientsInfo = clients.map((obj) => {
       return {

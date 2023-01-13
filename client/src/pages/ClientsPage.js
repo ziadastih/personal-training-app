@@ -2,41 +2,66 @@ import PageHeader from "../components/PageHeader";
 import { HiUserGroup } from "react-icons/hi";
 import SearchInput from "../components/SearchInput";
 import RegisterClient from "../components/clientsPageComponent/RegisterClient";
-import { useState, useEffect, useContext } from "react";
-import { PtContext } from "../context/PtContext";
+import { useState } from "react";
+import { BiLoaderCircle } from "react-icons/bi";
 import { BsFillPlusSquareFill } from "react-icons/bs";
 import OneClient from "../components/clientsPageComponent/OneClient";
 import CenterSectionBtn from "../components/CenterSectionBtn";
-import axios from "axios";
-
+import { useQuery } from "react-query";
+import { getAllClients, searchClients } from "../api/clientsApi";
+import useDebounce from "../customHooks/useDebounce";
 // =================ClientPage Component  =======================
 
 const ClientsPage = () => {
   const [formState, setFormState] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [clients, setClients] = useState([]);
-  const { dataLength, url } = useContext(PtContext);
 
-  // ====================fetch clients depend on dataLength and searchInput ==================
-  useEffect(() => {
-    const fetchClients = async () => {
-      if (searchInput.length === 0) {
-        const { data } = await axios.get(`${url}/api/v1/client/?count=30`, {
-          withCredentials: true,
-        });
-        setClients(data.clientsInfo);
-      } else {
-        const { data } = await axios.get(
-          `${url}/api/v1/client/?name=${searchInput}`,
-          {
-            withCredentials: true,
-          }
-        );
-        setClients(data.clientsInfo);
-      }
-    };
-    fetchClients();
-  }, [dataLength, searchInput]);
+  let clientsArr;
+
+  const {
+    isLoading,
+
+    data: clientsData,
+  } = useQuery("clients", getAllClients);
+
+  const debouncedSearchDelay = useDebounce(searchInput, 200);
+
+  const {
+    isLoading: searching,
+
+    data: searchedData,
+  } = useQuery(
+    ["searchedClient", debouncedSearchDelay],
+    () => searchClients(searchInput),
+
+    { enabled: Boolean(searchInput.length > 0) }
+  );
+
+  if (!isLoading) {
+    clientsArr = clientsData.clientsInfo.map((client) => {
+      return (
+        <OneClient
+          key={client.clientId}
+          id={client.clientId}
+          name={`${client.clientFirstName} ${client.clientLastName}`}
+          date={client.createdAt.slice(0, 10)}
+        />
+      );
+    });
+  }
+
+  if (searchInput.length > 0 && !searching) {
+    clientsArr = searchedData.clientsInfo.map((client) => {
+      return (
+        <OneClient
+          key={client.clientId}
+          id={client.clientId}
+          name={`${client.clientFirstName} ${client.clientLastName}`}
+          date={client.createdAt.slice(0, 10)}
+        />
+      );
+    });
+  }
 
   // =============update search input on Change ===========
 
@@ -49,19 +74,6 @@ const ClientsPage = () => {
     setFormState((prevState) => !prevState);
   };
 
-  // =============map over clients and display them ==============
-
-  const clientsArr = clients.map((client) => {
-    return (
-      <OneClient
-        key={client.clientId}
-        id={client.clientId}
-        name={`${client.clientFirstName} ${client.clientLastName}`}
-        date={client.createdAt.slice(0, 10)}
-      />
-    );
-  });
-
   // ====================clients page html ====================
 
   return (
@@ -71,10 +83,10 @@ const ClientsPage = () => {
       <div className="plus-btn" onClick={toggleForm}>
         <BsFillPlusSquareFill />
       </div>
-      {clients.length === 0 && (
+      {clientsArr?.length === 0 && (
         <CenterSectionBtn name="client" func={toggleForm} />
       )}
-
+      {isLoading || (searching && <BiLoaderCircle className="load" />)}
       <RegisterClient formState={formState} toggleForm={toggleForm} />
       <div className="grid-col-container">{clientsArr}</div>
     </div>
