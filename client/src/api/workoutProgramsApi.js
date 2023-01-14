@@ -5,7 +5,7 @@ const getAllPrograms = async (pageParam) => {
   return data.workoutprograms;
 };
 
-const deleteProgram = async ({ id }) => {
+const deleteProgram = async (id) => {
   const { data } = await clientsApi.delete(`/workoutProgram/${id}`);
   return data;
 };

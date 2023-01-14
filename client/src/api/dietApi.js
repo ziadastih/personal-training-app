@@ -10,7 +10,7 @@ const searchDiet = async (charachter) => {
   return data;
 };
 
-const deleteDiet = async ({ id }) => {
+const deleteDiet = async (id) => {
   const { data } = await clientsApi.delete(`/diet/${id}`);
   return data;
 };

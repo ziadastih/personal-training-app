@@ -4,14 +4,38 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import DeleteVerification from "../DeleteVerification";
 import { PtContext } from "../../context/PtContext";
-
+import { useMutation, useQueryClient } from "react-query";
+import { deleteDiet } from "../../api/dietApi";
+import clientsApi from "../../api/clientsApi";
+import { BiLoaderCircle } from "react-icons/bi";
 // =================One Diet Component =============
 
-const OneDiet = React.forwardRef(({ diet, removeProgram }, ref) => {
+const OneDiet = React.forwardRef(({ diet }, ref) => {
   const [verificationState, setVerificationState] = useState(false);
-
+  const { decreaseData, dataLength } = useContext(PtContext);
   const toggleBox = () => {
     setVerificationState((prevState) => !prevState);
+  };
+
+  const queryClient = useQueryClient();
+
+  // ===============delete diet mutation  =======================
+
+  const deleteDietMutation = useMutation(deleteDiet, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("dietsProgram");
+      setVerificationState(false);
+    },
+  });
+  // ===============delete function ====================
+
+  const deleteFunc = async () => {
+    deleteDietMutation.mutate(diet._id);
+
+    const updateDietLength = await clientsApi.patch("/dataLength", {
+      dietLength: dataLength[2].value - 1,
+    });
+    decreaseData(2);
   };
 
   const navigate = useNavigate();
@@ -20,6 +44,7 @@ const OneDiet = React.forwardRef(({ diet, removeProgram }, ref) => {
 
   return (
     <div className="one-diet-container" ref={ref ?? ref}>
+      {deleteDietMutation.isLoading && <BiLoaderCircle className="load" />}
       <div className="diet">
         <p>{diet.name}</p>
         <div
@@ -60,10 +85,7 @@ const OneDiet = React.forwardRef(({ diet, removeProgram }, ref) => {
         <DeleteVerification
           name={diet.name}
           toggleBox={toggleBox}
-          route="diet"
-          index={2}
-          _id={diet._id}
-          removeProgram={removeProgram}
+          deleteFunc={deleteFunc}
         />
       )}
     </div>

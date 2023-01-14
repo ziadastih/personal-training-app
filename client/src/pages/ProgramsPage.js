@@ -22,6 +22,7 @@ const ProgramsPage = () => {
     fetchNextPage,
     isFetchingNextPage,
     data: workoutProgramsArr,
+    isLoading,
   } = useInfiniteQuery(
     "workoutProgramsArr",
     ({ pageParam = 0 }) => getAllPrograms(pageParam),
@@ -94,7 +95,8 @@ const ProgramsPage = () => {
       )}
       <div className="grid-col-container">
         {programsArr}
-        {isFetchingNextPage && <BiLoaderCircle className="load" />}
+        {isFetchingNextPage ||
+          (isLoading && <BiLoaderCircle className="load" />)}
       </div>
     </div>
   );

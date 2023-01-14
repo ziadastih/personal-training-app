@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEditNote } from "react-icons/md";
 import {
@@ -9,15 +9,21 @@ import {
 import OneWorkout from "./OneWorkout";
 import useDays from "../../customHooks/DaysHook";
 import DeleteVerification from "../DeleteVerification";
-
+import { deleteProgram } from "../../api/workoutProgramsApi";
+import clientsApi from "../../api/clientsApi";
+import { useMutation, useQueryClient } from "react-query";
+import { PtContext } from "../../context/PtContext";
+import { BiLoaderCircle } from "react-icons/bi";
 // ================OneProgram Component============================
 
-const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
+const OneProgram = React.forwardRef(({ program }, ref) => {
   const [overviewState, setOverviewState] = useState(false);
   const [verificationState, setVerificationState] = useState(false);
   const { daysArr, currentDay } = useDays();
   const [workoutsArr, setWorkoutsArr] = useState([]);
   const navigate = useNavigate();
+
+  const { decreaseData, dataLength } = useContext(PtContext);
 
   // ===========toggle functions =================
 
@@ -28,6 +34,27 @@ const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
   const toggleOverview = () => {
     setOverviewState((prevState) => !prevState);
   };
+
+  const queryClient = useQueryClient();
+
+  //  ============delete program mutation =================
+
+  const deleteProgramMutation = useMutation(deleteProgram, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("workoutProgramsArr");
+      setVerificationState(false);
+    },
+  });
+
+  const deleteFunc = async () => {
+    deleteProgramMutation.mutate(program._id);
+    const updateWorkoutLength = await clientsApi.patch("/dataLength", {
+      workoutLength: dataLength[1].value - 1,
+    });
+
+    decreaseData(1);
+  };
+
   // ================use effect to get the current workouts depend on the current day
   useEffect(() => {
     setWorkoutsArr(program.weeks[0].days[currentDay[0].index].workouts);
@@ -47,6 +74,7 @@ const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
 
   return (
     <div className={programBorder} ref={ref ?? ref}>
+      {deleteProgramMutation.isLoading && <BiLoaderCircle className="load" />}
       <div className="program">
         {!overviewState && (
           <BsArrowsExpand
@@ -104,10 +132,7 @@ const OneProgram = React.forwardRef(({ program, removeProgram }, ref) => {
         <DeleteVerification
           name={program.name}
           toggleBox={toggleBox}
-          route="workoutProgram"
-          index={1}
-          _id={program._id}
-          removeProgram={removeProgram}
+          deleteFunc={deleteFunc}
         />
       )}
     </div>

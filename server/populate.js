@@ -10,8 +10,8 @@ const clientsPop = require("./client.json");
 const start = async () => {
   try {
     await connectDB(process.env.PT_URI);
-    await clients.deleteMany();
-    await clients.create(clientsPop);
+    await workouts.deleteMany();
+    await workouts.create(workoutPlans);
     console.log("Success!!!!");
     process.exit(0);
   } catch (error) {
