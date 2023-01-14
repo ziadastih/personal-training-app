@@ -38,7 +38,7 @@ const ClientsPage = () => {
   );
 
   if (!isLoading) {
-    clientsArr = clientsData.clientsInfo.map((client) => {
+    clientsArr = clientsData?.clientsInfo.map((client) => {
       return (
         <OneClient
           key={client.clientId}
@@ -51,7 +51,7 @@ const ClientsPage = () => {
   }
 
   if (searchInput.length > 0 && !searching) {
-    clientsArr = searchedData.clientsInfo.map((client) => {
+    clientsArr = searchedData?.clientsInfo.map((client) => {
       return (
         <OneClient
           key={client.clientId}

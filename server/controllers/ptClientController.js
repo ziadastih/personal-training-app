@@ -28,7 +28,9 @@ const getallClients = async (req, res) => {
     });
     res.status(StatusCodes.OK).json({ clientsInfo });
   } else {
-    const clients = await Client.find({ createdBy: req.coach.coachId });
+    const clients = await Client.find({ createdBy: req.coach.coachId }).sort(
+      "-createdAt"
+    );
     const clientsInfo = clients.map((obj) => {
       return {
         clientFirstName: obj.firstName,

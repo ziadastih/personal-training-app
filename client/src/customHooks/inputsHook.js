@@ -1,5 +1,7 @@
 import { useState, useContext } from "react";
 import axios from "axios";
+import clientsApi, { createClient } from "../api/clientsApi";
+import { useMutation, useQueryClient } from "react-query";
 import Input from "../components/Input";
 import { PtContext } from "../context/PtContext";
 
@@ -41,7 +43,7 @@ const useInputs = (value) => {
       ? [{ name: "program name", value: "", type: "text", alert: false }]
       : [{ name: "workout name", value: "", type: "text", alert: false }]
   );
-  const { url, increaseData, dataLength } = useContext(PtContext);
+  const { increaseData, dataLength } = useContext(PtContext);
 
   // ===========activate alert depend on the validation  =========================
   const activateAlert = (name) => {
@@ -59,6 +61,14 @@ const useInputs = (value) => {
     return res.test(emailValue);
   };
 
+  const queryClient = useQueryClient();
+
+  const createClientMutation = useMutation(createClient, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("clients");
+    },
+  });
+
   // ===========validate inputs and submit request to the api, depend on the inputs we have  =======================
 
   const validateInputs = async () => {
@@ -70,6 +80,8 @@ const useInputs = (value) => {
     const lastName = values[1];
     const email = values[2];
     const number = values[3];
+    // =========validating inputs in order =========
+
     if (firstName.length < 3) return activateAlert("first name");
 
     if (lastName.length < 3) return activateAlert("last name");
@@ -78,11 +90,13 @@ const useInputs = (value) => {
 
     if (number.length < 3) return activateAlert("number");
 
+    // ======if there is a password we want to register a coach if not we want to register a client for a coach
+
     if (values.length > 4) {
       const password = values[4];
       if (password.length < 6) return activateAlert("password");
       try {
-        const data = await axios.post(`${url}/api/v1/auth/register`, {
+        const data = await clientsApi.post(`/auth/register`, {
           firstName,
           lastName,
           email,
@@ -102,33 +116,22 @@ const useInputs = (value) => {
         password += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
-      try {
-        const { client } = await axios.post(
-          `${url}/api/v1/client`,
-          {
-            firstName,
-            lastName,
-            email,
-            number,
-            password,
-          },
-          { withCredentials: true }
-        );
-        await increaseData(0);
+      createClientMutation.mutate({
+        firstName,
+        lastName,
+        email,
+        password,
+        number,
+      });
 
-        const updateData = await axios.patch(
-          `${url}/api/v1/dataLength`,
+      const updateData = await clientsApi.patch(
+        `/dataLength`,
 
-          { clientLength: dataLength[0].value + 1 },
-          {
-            withCredentials: true,
-          }
-        );
+        { clientLength: dataLength[0].value + 1 }
+      );
 
-        resetInputs();
-      } catch (error) {
-        console.log(error);
-      }
+      increaseData(0);
+      resetInputs();
     }
   };
 

@@ -1,7 +1,7 @@
 import { PtContext } from "../context/PtContext";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
-import axios from "axios";
+import clientsApi from "../api/clientsApi";
 import { BiDumbbell } from "react-icons/bi";
 import { BsFillBellFill } from "react-icons/bs";
 import { useContext, useEffect } from "react";
@@ -14,17 +14,15 @@ import NavigationBox from "../components/NavigationBox";
 // ================Component ===============
 
 const CoachHomePage = () => {
-  const { url, user, setOriginalData, dataLength } = useContext(PtContext);
+  const { user, setOriginalData, dataLength } = useContext(PtContext);
   // ============get the dataLength and set it state ===================
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`${url}/api/v1/dataLength`, {
-          withCredentials: true,
-        });
+        const { data } = await clientsApi.get(`/dataLength`);
 
         if (data.dataLength.length === 0) {
-          const data = await axios.post("/api/v1/dataLength");
+          const data = await clientsApi.post(`/dataLength`);
         } else {
           let workoutLength = data.dataLength[0].workoutLength;
           let dietLength = data.dataLength[0].dietLength;

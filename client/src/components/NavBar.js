@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import clientsApi from "../api/clientsApi";
 import { Link } from "react-router-dom";
 import { PtContext } from "../context/PtContext";
 import {
@@ -15,14 +15,12 @@ import { CgLogOut } from "react-icons/cg";
 const NavBar = () => {
   const { pathname } = useLocation();
   const page = pathname.split("/")[1];
-  const { user, resetUser, url, resetData } = useContext(PtContext);
+  const { user, resetUser, resetData } = useContext(PtContext);
   const navigate = useNavigate();
 
   const logoutFunc = async () => {
     try {
-      const data = await axios.post(`${url}/api/v1/auth/logout`, {
-        withCredentials: true,
-      });
+      const data = await clientsApi.post(`/auth/logout`);
       resetUser();
       resetData();
       localStorage.clear();

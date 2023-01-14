@@ -1,7 +1,7 @@
 import useInputs from "../../customHooks/inputsHook";
 import { PtContext } from "../../context/PtContext";
 import FormHeader from "../FormHeader";
-import axios from "axios";
+import clientsApi from "../../api/clientsApi";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 
@@ -10,7 +10,7 @@ import { useState, useContext } from "react";
 const LoginForm = ({ formState, toggleForm }) => {
   const { inputs, inputsValue, resetInputs, loginAlert } = useInputs("login");
   const [role, setRole] = useState("coach");
-  const { updateUser, url } = useContext(PtContext);
+  const { updateUser } = useContext(PtContext);
   const navigate = useNavigate();
 
   // ===============login function ====================
@@ -23,15 +23,13 @@ const LoginForm = ({ formState, toggleForm }) => {
     const password = values[1];
 
     try {
-      const { data } = await axios.post(
-        `${url}/api/v1/auth/login`,
-        {
-          email,
-          password,
-          role,
-        },
-        { withCredentials: true }
-      );
+      const { data } = await clientsApi.post(`auth/login`, {
+        email,
+        password,
+        role,
+      });
+
+      // ============setting first name and last name to update user in our context api
 
       let id = role === "coach" ? data.coach.coachId : data.client.clientId;
       let firstName =

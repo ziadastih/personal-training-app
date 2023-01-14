@@ -26,7 +26,7 @@ const OneClient = ({ name, id, date }) => {
   });
 
   const deleteFunc = async () => {
-    deleteClientMutation.mutate({ id });
+    deleteClientMutation.mutate(id);
     const updateClientLength = await clientsApi.patch("/dataLength", {
       clientLength: dataLength[0].value - 1,
     });
