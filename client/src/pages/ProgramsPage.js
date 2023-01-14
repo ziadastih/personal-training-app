@@ -24,12 +24,11 @@ const ProgramsPage = () => {
     data: workoutProgramsArr,
   } = useInfiniteQuery(
     "workoutProgramsArr",
-    ({ pageParam = 0 }) => {
-      return getAllPrograms(pageParam);
-    },
+    ({ pageParam = 0 }) => getAllPrograms(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length ? allPages.length + 1 : undefined;
+        const nextPage = allPages.length;
+        return lastPage.length !== 0 ? nextPage : undefined;
       },
     }
   );
@@ -53,7 +52,6 @@ const ProgramsPage = () => {
       observer.current = new IntersectionObserver((progs) => {
         if (progs[0].isIntersecting && hasNextPage) {
           fetchNextPage();
-          console.log(fetchNextPage());
         }
       });
       if (prog) observer.current.observe(prog);

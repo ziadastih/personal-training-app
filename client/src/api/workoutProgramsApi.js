@@ -1,7 +1,7 @@
 import clientsApi from "./clientsApi";
 
-const getAllPrograms = async ({ pageParams = 0 }) => {
-  const { data } = await clientsApi.get(`/workoutProgram?page=${pageParams}`);
+const getAllPrograms = async (pageParam) => {
+  const { data } = await clientsApi.get(`/workoutProgram?page=${pageParam}`);
   return data.workoutprograms;
 };
 
