@@ -33,26 +33,27 @@ TASKS:
 
 1_global:   
             1_setup the features for the navBar and the support mail
-            2_set loading icon on every request that i have
+            2_populate data again and run few test on all current pages and write a small documentation for the intesection observer function 
+            
 
 2_Homepage :
             1_need to setup the number verification with an api.
             2_forgot password function
 
 
-3_coachHomepage:
-            1_clear maybe change design
            
 
-4_clients:  
-            1_clear , skip pagination cz average coaches will have 10-30 clients at best so it will load them real fast 
-            2_add loader when page load or on delete client
+3_clients:  
+            1_clear , skip or not infinitescroll ? cz average coaches will have 10-30 clients at best so it will load them real fast 
+            
 
-5_programsPage:
-            1_ need to fix the bug when searching and deleting to reset  the array 
-            2_set the loading when we search
+4_programsPage:
+            1_ maybe add optimistic update
+            2_handle api error 
+            
 
 5_NutritionPage:
-            1_ need to fix the bug when searching and deleting to reset  the array 
-            2_set the loading when we search
+            1_ maybe add  optimistic update
+            2_handle api error 
+      
 

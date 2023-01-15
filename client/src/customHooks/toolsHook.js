@@ -8,7 +8,10 @@ const useTools = (page, id, func) => {
   const navigate = useNavigate();
   const tools = (
     <div className="tools" style={{ color: "var(--blue)" }}>
-      <MdOutlineEditNote onClick={() => navigate(`/${page}/${id}`)} />
+      <MdOutlineEditNote
+        style={{ fontSize: "25px" }}
+        onClick={() => navigate(`/${page}/${id}`)}
+      />
       <BsFillTrashFill onClick={func} />
     </div>
   );

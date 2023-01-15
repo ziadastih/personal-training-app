@@ -6,8 +6,9 @@ const getAllDiets = async (pageParam) => {
 };
 
 const searchDiet = async (charachter) => {
+  if (charachter.length === 0) return;
   const { data } = await clientsApi.get(`/diet?name=${charachter}`);
-  return data;
+  return data.diets;
 };
 
 const deleteDiet = async (id) => {

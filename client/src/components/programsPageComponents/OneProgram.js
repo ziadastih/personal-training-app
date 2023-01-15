@@ -1,58 +1,52 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { MdOutlineEditNote } from "react-icons/md";
-import {
-  BsFillTrashFill,
-  BsArrowsCollapse,
-  BsArrowsExpand,
-} from "react-icons/bs";
+import { BsArrowsCollapse, BsArrowsExpand } from "react-icons/bs";
 import OneWorkout from "./OneWorkout";
 import useDays from "../../customHooks/DaysHook";
 import DeleteVerification from "../DeleteVerification";
 import { deleteProgram } from "../../api/workoutProgramsApi";
 import clientsApi from "../../api/clientsApi";
 import { useMutation, useQueryClient } from "react-query";
+import useTools from "../../customHooks/toolsHook";
+import useToggle from "../../customHooks/toggleHook";
 import { PtContext } from "../../context/PtContext";
 import { BiLoaderCircle } from "react-icons/bi";
 // ================OneProgram Component============================
 
 const OneProgram = React.forwardRef(({ program }, ref) => {
-  const [overviewState, setOverviewState] = useState(false);
-  const [verificationState, setVerificationState] = useState(false);
+  // =======toggle  hooks ======================
+  const { toggleFunc, isToggled } = useToggle();
+  const { toggleFunc: toggleOverview, isToggled: overviewState } = useToggle();
+
+  // =========tools =============
+  const { tools } = useTools("editProgram", program._id, toggleFunc);
+  // ============days hook  ==============
+
   const { daysArr, currentDay } = useDays();
+
+  // =======workoutarr state =========
   const [workoutsArr, setWorkoutsArr] = useState([]);
-  const navigate = useNavigate();
 
   const { decreaseData, dataLength } = useContext(PtContext);
 
-  // ===========toggle functions =================
-
-  const toggleBox = () => {
-    setVerificationState((prevState) => !prevState);
-  };
-
-  const toggleOverview = () => {
-    setOverviewState((prevState) => !prevState);
-  };
-
   const queryClient = useQueryClient();
 
-  //  ============delete program mutation =================
+  //  ============delete program mutation on success update datalength =================
 
   const deleteProgramMutation = useMutation(deleteProgram, {
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries("workoutProgramsArr");
-      setVerificationState(false);
+      queryClient.invalidateQueries("searchedPrograms");
+      await clientsApi.patch("/dataLength", {
+        workoutLength: dataLength[1].value - 1,
+      });
+
+      decreaseData(1);
+      toggleFunc();
     },
   });
 
   const deleteFunc = async () => {
     deleteProgramMutation.mutate(program._id);
-    const updateWorkoutLength = await clientsApi.patch("/dataLength", {
-      workoutLength: dataLength[1].value - 1,
-    });
-
-    decreaseData(1);
   };
 
   // ================use effect to get the current workouts depend on the current day
@@ -70,39 +64,28 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
     ? "program-container border-bottom"
     : "program-container";
 
-  // ===========one program html =====================
+  // ===============arrow styles ==========
+  const arrowStyles = {
+    marginLeft: "30px",
+    color: "var(--white)",
+    opacity: 0.5,
+  };
+  // =========== render programs with ref to the last one =====================
 
   return (
     <div className={programBorder} ref={ref ?? ref}>
       {deleteProgramMutation.isLoading && <BiLoaderCircle className="load" />}
       <div className="program">
+        {/* ============arrows ============ */}
         {!overviewState && (
-          <BsArrowsExpand
-            style={{ marginLeft: "30px", color: "var(--white)", opacity: 0.5 }}
-            onClick={toggleOverview}
-          />
+          <BsArrowsExpand style={arrowStyles} onClick={toggleOverview} />
         )}
         {overviewState && (
-          <BsArrowsCollapse
-            style={{ marginLeft: "30px", color: "var(--white)", opacity: 0.5 }}
-            onClick={toggleOverview}
-          />
+          <BsArrowsCollapse style={arrowStyles} onClick={toggleOverview} />
         )}
-
+        {/* ==================== name and tools  =========== */}
         <p>{program.name}</p>
-        <div
-          className="tools"
-          style={{
-            color: "var(--blue)",
-            marginRight: "30px",
-          }}
-        >
-          <MdOutlineEditNote
-            style={{ fontSize: "25px" }}
-            onClick={() => navigate(`/program/${program._id}`)}
-          />
-          <BsFillTrashFill onClick={toggleBox} />
-        </div>
+        {tools}
       </div>
 
       {/* ======================overview =================== */}
@@ -128,10 +111,10 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
         </div>
       )}
       {/* ==================verification component =================== */}
-      {verificationState && (
+      {isToggled && (
         <DeleteVerification
           name={program.name}
-          toggleBox={toggleBox}
+          toggleBox={toggleFunc}
           deleteFunc={deleteFunc}
         />
       )}

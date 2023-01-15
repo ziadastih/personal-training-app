@@ -1,66 +1,51 @@
-import React, { useContext, useState } from "react";
-import { MdOutlineEditNote } from "react-icons/md";
-import { BsFillTrashFill } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
 import DeleteVerification from "../DeleteVerification";
 import { PtContext } from "../../context/PtContext";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteDiet } from "../../api/dietApi";
 import clientsApi from "../../api/clientsApi";
 import { BiLoaderCircle } from "react-icons/bi";
+import useToggle from "../../customHooks/toggleHook";
+import useTools from "../../customHooks/toolsHook";
 // =================One Diet Component =============
 
 const OneDiet = React.forwardRef(({ diet }, ref) => {
-  const [verificationState, setVerificationState] = useState(false);
+  const { isToggled, toggleFunc } = useToggle();
+  const { tools } = useTools("editDiet", diet._id, toggleFunc);
   const { decreaseData, dataLength } = useContext(PtContext);
-  const toggleBox = () => {
-    setVerificationState((prevState) => !prevState);
-  };
 
   const queryClient = useQueryClient();
 
-  // ===============delete diet mutation  =======================
+  // ===============delete diet mutation on success update diet length  =======================
 
   const deleteDietMutation = useMutation(deleteDiet, {
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries("dietsProgram");
-      setVerificationState(false);
+      queryClient.invalidateQueries("searchedDiets");
+      await clientsApi.patch("/dataLength", {
+        dietLength: dataLength[2].value - 1,
+      });
+      decreaseData(2);
+      toggleFunc();
     },
   });
   // ===============delete function ====================
 
   const deleteFunc = async () => {
     deleteDietMutation.mutate(diet._id);
-
-    const updateDietLength = await clientsApi.patch("/dataLength", {
-      dietLength: dataLength[2].value - 1,
-    });
-    decreaseData(2);
   };
 
-  const navigate = useNavigate();
-
-  // ===================toggle Box=========================
+  // =================== render diet with ref if it is available=========================
 
   return (
     <div className="one-diet-container" ref={ref ?? ref}>
       {deleteDietMutation.isLoading && <BiLoaderCircle className="load" />}
       <div className="diet">
+        {/* ========diet name and tools =========== */}
         <p>{diet.name}</p>
-        <div
-          className="tools"
-          style={{
-            color: "var(--blue)",
-            marginRight: "30px",
-          }}
-        >
-          <MdOutlineEditNote
-            style={{ fontSize: "25px" }}
-            onClick={() => navigate(`/diet/${diet._id}`)}
-          />
-          <BsFillTrashFill onClick={toggleBox} />
-        </div>
+        {tools}
       </div>
+      {/* ============total diet macros ============= */}
       <div className="total-diet-macros">
         <div className="macros-info">
           <span>cal.</span>
@@ -81,10 +66,10 @@ const OneDiet = React.forwardRef(({ diet }, ref) => {
       </div>
       {/* ==================verification component =================== */}
 
-      {verificationState && (
+      {isToggled && (
         <DeleteVerification
           name={diet.name}
-          toggleBox={toggleBox}
+          toggleBox={toggleFunc}
           deleteFunc={deleteFunc}
         />
       )}

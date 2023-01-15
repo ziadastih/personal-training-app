@@ -13,6 +13,7 @@ const getAllClients = async () => {
 };
 
 const searchClients = async (charachter) => {
+  if (charachter.length === 0) return;
   const { data } = await clientsApi.get(`/client?name=${charachter}`);
   return data;
 };

@@ -11,8 +11,9 @@ const deleteProgram = async (id) => {
 };
 
 const searchPrograms = async (charachter) => {
+  if (charachter.length === 0) return;
   const { data } = await clientsApi.get(`workoutProgram?name=${charachter}`);
-  return data;
+  return data.workoutprograms;
 };
 
 export { getAllPrograms, deleteProgram, searchPrograms };

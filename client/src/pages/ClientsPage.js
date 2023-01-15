@@ -38,7 +38,7 @@ const ClientsPage = () => {
     data: searchedData,
   } = useQuery(
     ["searchedClient", debouncedSearchDelay],
-    () => searchClients(searchInput),
+    () => searchClients(debouncedSearchDelay),
 
     { enabled: Boolean(searchInput.length > 0) }
   );

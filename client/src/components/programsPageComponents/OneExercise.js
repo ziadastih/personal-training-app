@@ -1,15 +1,10 @@
-import { useState } from "react";
 import { GiJoin } from "react-icons/gi";
-
 import { MdSlideshow } from "react-icons/md";
-import toolImg from "../images/toolsImg.png";
-import IframeContainer from "./Iframe";
+import toolImg from "../../images/toolsImg.png";
+import IframeContainer from "../Iframe";
+import useToggle from "../../customHooks/toggleHook";
 const OneExercice = ({ exercise }) => {
-  const [iframeState, setIframeState] = useState(false);
-
-  const toggleIframe = () => {
-    setIframeState((prevState) => !prevState);
-  };
+  const { isToggled, toggleFunc } = useToggle();
 
   const styles = {
     position: "absolute",
@@ -20,27 +15,33 @@ const OneExercice = ({ exercise }) => {
     zIndex: "-1",
   };
 
+  // =============render exercise ===============
+
   return (
     <div className="one-exercise-container">
-      {iframeState && <div className="overlay"></div>}
+      {isToggled && <div className="overlay"></div>}
+      {/* ============check if it is a superset or not  =========== */}
+
       {exercise.chain && <GiJoin style={styles} />}
       {exercise.chain && <GiJoin style={{ ...styles, left: "45%" }} />}
-
+      {/* ==================img and name  ======================== */}
       <div className="container-top-section">
         <div className="exercise-general-info">
           <img src={toolImg} alt="" />
           <p className="chosen-exercise-name">{exercise.name}</p>
         </div>
+        {/* ===========exercise tools note and iframe ========= */}
         <div className="exercise-tools">
           {exercise.note.length > 0 && (
             <p className="note-info">{exercise.note}</p>
           )}
           <MdSlideshow
             style={{ color: "var(--blue)", fontSize: "22px" }}
-            onClick={toggleIframe}
+            onClick={toggleFunc}
           />
         </div>
       </div>
+      {/* ============exercise stat container  =========== */}
       <div className="exercise-stats-container">
         <div className="input-container">
           <p>set:</p>
@@ -58,6 +59,9 @@ const OneExercice = ({ exercise }) => {
           <p>tempo:</p>
           <div id="tempo-input">{exercise.tempo || "-"}</div>
         </div>
+
+        {/* ============buttons  type container ============== */}
+
         <div className="button-type-container">
           {exercise.type === "dropset" && (
             <button className="full-btn">dropset</button>
@@ -68,11 +72,12 @@ const OneExercice = ({ exercise }) => {
           )}
         </div>
       </div>
+      {/* ==========iframe container ======================== */}
       {exercise.video && (
         <IframeContainer
-          toggleIframe={toggleIframe}
+          toggleIframe={toggleFunc}
           videoSrc={exercise.video}
-          iframeState={iframeState}
+          iframeState={isToggled}
         />
       )}
     </div>

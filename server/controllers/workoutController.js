@@ -17,7 +17,9 @@ const getAllWorkoutPrograms = async (req, res) => {
     queryObject.name = { $regex: name, $options: "i" };
     queryObject.createdBy = req.coach.coachId;
 
-    const workoutprograms = await WorkoutProgram.find(queryObject).lean();
+    const workoutprograms = await WorkoutProgram.find(queryObject)
+      .sort("-createdAt")
+      .lean();
 
     res.status(StatusCodes.OK).json({ workoutprograms });
   }
