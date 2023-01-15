@@ -43,6 +43,7 @@ const LoginForm = ({ formState, toggleForm }) => {
 
       resetInputs();
       updateUser(role, id, firstName, lastName);
+      toggleForm();
       navigate(`/${role}`);
     } catch (error) {
       loginAlert();

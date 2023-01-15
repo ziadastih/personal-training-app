@@ -1,13 +1,12 @@
 import { useState, useContext } from "react";
-import axios from "axios";
 import clientsApi, { createClient } from "../api/clientsApi";
 import { useMutation, useQueryClient } from "react-query";
 import Input from "../components/Input";
 import { PtContext } from "../context/PtContext";
 
-// =============useInput custom Hook =================
+// =============useInput custom Hook takes a value and a toggle function =================
 
-const useInputs = (value) => {
+const useInputs = (value, func) => {
   const [inputsValue, setInputsValue] = useState(
     value === "register"
       ? [
@@ -64,8 +63,16 @@ const useInputs = (value) => {
   const queryClient = useQueryClient();
 
   const createClientMutation = useMutation(createClient, {
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries("clients");
+      func();
+      await clientsApi.patch(
+        `/dataLength`,
+
+        { clientLength: dataLength[0].value + 1 }
+      );
+      increaseData(0);
+      resetInputs();
     },
   });
 
@@ -104,6 +111,8 @@ const useInputs = (value) => {
           password,
         });
         resetInputs();
+        func();
+        return data;
       } catch (error) {
         console.log(error.msg);
       }
@@ -123,15 +132,6 @@ const useInputs = (value) => {
         password,
         number,
       });
-
-      const updateData = await clientsApi.patch(
-        `/dataLength`,
-
-        { clientLength: dataLength[0].value + 1 }
-      );
-
-      increaseData(0);
-      resetInputs();
     }
   };
 
@@ -143,7 +143,7 @@ const useInputs = (value) => {
       });
     });
   };
-  // ==========reset the values of inputs after successfully submitting a form
+  // ==========reset the values of inputs func
   const resetInputs = () => {
     setInputsValue((prevValues) => {
       return prevValues.map((input) => {

@@ -17,7 +17,7 @@ function App() {
         <Route path="/coach" element={<CoachHomePage />} />
         <Route path="/clients" element={<ClientsPage />} />
         <Route path="/programs" element={<ProgramsPage />} />
-        <Route path="/diets" element={<NutritionPage />} />
+        <Route path="/nutrition" element={<NutritionPage />} />
         <Route path="/createProgram" element={<CreateProgramPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -20,6 +20,11 @@ const PtContextProvider = (props) => {
       value: 0,
     },
   ]);
+  const [formState, setFormState] = useState(false);
+
+  const toggleForm = () => {
+    setFormState((prevState) => !prevState);
+  };
 
   // ====================reset and update user functions===========
 
@@ -126,6 +131,8 @@ const PtContextProvider = (props) => {
         resetData,
         decreaseData,
         increaseData,
+        toggleForm,
+        formState,
       }}
     >
       {props.children}

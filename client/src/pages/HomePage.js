@@ -1,44 +1,27 @@
-import { useState } from "react";
-
 import bodyBg from "../images/dark-mode-bg.png";
 import logo from "../images/logoNoBg.png";
 import { GiBiceps } from "react-icons/gi";
 import { MdLogin } from "react-icons/md";
 import RegisterForm from "../components/homepageComponents/RegisterForm";
 import LoginForm from "../components/homepageComponents/LoginForm";
+import useToggle from "../customHooks/toggleHook";
 
 const HomePage = () => {
-  const [formsState, setFormsState] = useState([
-    {
-      name: "login",
-      toggle: false,
-    },
-    {
-      name: "sign up",
-      toggle: false,
-    },
-  ]);
-  // ============open and close form function will be sent by props ==========
-
-  const toggleForm = (e) => {
-    let name = e.target.dataset.id;
-
-    setFormsState((prevState) => {
-      return prevState.map((form) => {
-        return form.name === name ? { ...form, toggle: !form.toggle } : form;
-      });
-    });
-  };
+  const { toggleFunc: toggleRegister, isToggled: registerFormState } =
+    useToggle();
+  const { toggleFunc: toggleLogin, isToggled: loginFormState } = useToggle();
 
   return (
     <div className="homepage">
+      {/* =============logo ===================== */}
       <div className="logo-container">
         <img src={logo} alt="logo" className="logo-img" />
       </div>
-
+      {/* ====================bg img ======================== */}
       <div className="bg-container">
         <img src={bodyBg} alt="bg" className="bg-img" />
       </div>
+      {/* ===============slogan and description ============= */}
       <article className="homepage-main">
         <div className="text-content">
           <div className="slogan">
@@ -54,21 +37,15 @@ const HomePage = () => {
             delectus tenetur nesciunt laudantium eos beatae suscipit omnis,
             deserunt dolore eveniet.
           </p>
-          <button
-            className="btn toggle-register"
-            data-id="sign up"
-            onClick={toggleForm}
-          >
+          {/* =============toggle form   buttons ======================== */}
+
+          <button className="btn toggle-register" onClick={toggleRegister}>
             get started
             <span>
               <GiBiceps style={{ color: "var(--white)" }} />
             </span>
           </button>
-          <button
-            className="btn toggle-login"
-            data-id="login"
-            onClick={toggleForm}
-          >
+          <button className="btn toggle-login" onClick={toggleLogin}>
             login
             <span>
               <MdLogin style={{ color: "var(--white)" }} />
@@ -76,9 +53,9 @@ const HomePage = () => {
           </button>
         </div>
       </article>
-
-      <RegisterForm formState={formsState[1].toggle} toggleForm={toggleForm} />
-      <LoginForm formState={formsState[0].toggle} toggleForm={toggleForm} />
+      {/* =======================Forms ===================== */}
+      <RegisterForm formState={registerFormState} toggleForm={toggleRegister} />
+      <LoginForm formState={loginFormState} toggleForm={toggleLogin} />
     </div>
   );
 };

@@ -2,9 +2,9 @@ import useInputs from "../../customHooks/inputsHook";
 import FormHeader from "../FormHeader";
 
 const RegisterClient = ({ formState, toggleForm }) => {
-  const { inputs, validateInputs } = useInputs("client");
+  const { inputs, validateInputs } = useInputs("client", toggleForm);
 
-  // =============RegisterClient html  ===================
+  // =============   render form   ============================
 
   return (
     <div>

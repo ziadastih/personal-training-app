@@ -1,5 +1,4 @@
 import { PtContext } from "../context/PtContext";
-import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import clientsApi from "../api/clientsApi";
 import { BiDumbbell } from "react-icons/bi";
@@ -8,21 +7,32 @@ import { useContext, useEffect } from "react";
 import { GiMeal } from "react-icons/gi";
 import { HiUserGroup } from "react-icons/hi";
 import { RxActivityLog } from "react-icons/rx";
-
-import NavigationBox from "../components/NavigationBox";
+import useNavigationTools from "../customHooks/navigationToolsHooks";
 
 // ================Component ===============
 
 const CoachHomePage = () => {
   const { user, setOriginalData, dataLength } = useContext(PtContext);
+  // ======== navigation tools hook and array to display what we need
+  const value = [
+    { name: "clients", icon: <HiUserGroup /> },
+    { name: "activities", icon: <RxActivityLog /> },
+    { name: "programs", icon: <BiDumbbell /> },
+    { name: "nutrition", icon: <GiMeal /> },
+  ];
+
+  const { navigation } = useNavigationTools(value);
+
   // ============get the dataLength and set it state ===================
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await clientsApi.get(`/dataLength`);
+        // ======if client is new we need to create a dataLength for him else we fetch the data and store it in context api
 
         if (data.dataLength.length === 0) {
           const data = await clientsApi.post(`/dataLength`);
+          return data;
         } else {
           let workoutLength = data.dataLength[0].workoutLength;
           let dietLength = data.dataLength[0].dietLength;
@@ -37,13 +47,14 @@ const CoachHomePage = () => {
 
     fetchData();
   }, []);
-  const navigate = useNavigate();
 
   // ==================homepage html =====================
 
   return (
     <div className="all-pages-bg">
+      {/* ===========page header ======= */}
       <PageHeader name="home" icon={<BsFillBellFill />} />
+      {/* ===== profile and dashboard ======== */}
       <div className="profile-section">
         <div className="profile-container">
           <div className="profile-info">
@@ -70,28 +81,7 @@ const CoachHomePage = () => {
       </div>
       {/* ==========navigation tools container  =========== */}
       <div className="navigation-main-container">
-        <div className="navigation-tools-container">
-          <NavigationBox
-            name="clients"
-            icon={<HiUserGroup />}
-            func={() => navigate(`/clients`)}
-          />
-          <NavigationBox
-            name="activities"
-            icon={<RxActivityLog />}
-            func={() => navigate(`/activities`)}
-          />
-          <NavigationBox
-            name="program"
-            icon={<BiDumbbell />}
-            func={() => navigate(`/programs`)}
-          />
-          <NavigationBox
-            name="nutrition"
-            icon={<GiMeal />}
-            func={() => navigate(`/diets`)}
-          />
-        </div>
+        <div className="navigation-tools-container">{navigation}</div>
       </div>
     </div>
   );
