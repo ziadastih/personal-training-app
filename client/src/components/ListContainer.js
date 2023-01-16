@@ -2,23 +2,38 @@ import ListItem from "./ListItem";
 import { IoIosClose } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
 
-const ListContainer = ({ name, originalList, formState }) => {
+const ListContainer = ({
+  name,
+  originalList,
+  toggleList,
+  listState,
+  addExercises,
+}) => {
   const list = originalList?.map((item) => {
-    return <ListItem key={crypto.randomUUID()} item={item} />;
+    return (
+      <ListItem
+        key={crypto.randomUUID()}
+        item={item}
+        addExercises={addExercises}
+      />
+    );
   });
 
+  // ===================render ==================
+
   return (
-    <div className="list-container">
-      {formState && <div className="overlay"></div>}
+    <div
+      className={listState ? "list-container : display-flex" : "list-container"}
+    >
       <div className="list-content-container">
         <div className="list-header">
           <h2>add {name}</h2>
-          <IoIosClose />
+          <IoIosClose style={{ fontSize: "20px" }} onClick={toggleList} />
         </div>
 
         <div className="list-input">
           <input type="search" placeholder="search for exercise" />
-          <AiOutlineSearch />
+          <AiOutlineSearch style={{ marginRight: "20px" }} />
         </div>
         <span className="list-split-line"></span>
 

@@ -1,79 +1,143 @@
 import PageHeader from "../components/PageHeader";
 import useDays from "../customHooks/DaysHook";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import NameBox from "../components/createProgram/NameBox";
 import exercisesList from "../fixedData,/exercisesList.json";
 import ListContainer from "../components/ListContainer";
+import useToggle from "../customHooks/toggleHook";
 // ============Page Component  ================
 const CreateProgramPage = () => {
-  const [formsState, setFormsState] = useState([
-    {
-      name: "program name",
-      toggle: true,
-    },
-    {
-      name: "workout name",
-      toggle: false,
-    },
-    {
-      name: "exercises list",
-      toggle: false,
-    },
-    {
-      name: "exercise name",
-      toggle: false,
-    },
-  ]);
-  const [originalList] = useState(exercisesList);
+  const [program, setProgram] = useState({
+    name: "",
+    weeks: [
+      {
+        days: [
+          {
+            workouts: [],
+          },
+          {
+            workouts: [],
+          },
+          {
+            workouts: [],
+          },
+          {
+            workouts: [],
+          },
+          {
+            workouts: [],
+          },
+          {
+            workouts: [],
+          },
+          {
+            workouts: [],
+          },
+        ],
+      },
+    ],
+  });
 
-  const [programName, setProgramName] = useState("");
+  const [selectedExercises, setSelectedExercises] = useState([]);
+
+  const addExercises = (exercise) => {
+    if (exercise.selected === true) {
+      setOriginalList((prevList) => {
+        return prevList.map((ex) => {
+          return ex.name === exercise.name ? { ...ex, selected: false } : ex;
+        });
+      });
+    } else {
+      setOriginalList((prevList) => {
+        return prevList.map((ex) => {
+          return ex.name === exercise.name ? { ...ex, selected: true } : ex;
+        });
+      });
+    }
+  };
+
+  // ==============toggle functions ==================
+  const { isToggled: programNameBoxState, toggleFunc: toggleProgramNameBox } =
+    useToggle();
+
+  const { isToggled: listContainerState, toggleFunc: toggleListContainer } =
+    useToggle();
+
+  //============= original exercises list state   =======
+  const [originalList, setOriginalList] = useState(exercisesList);
+  useEffect(() => {
+    let selectedExercicesArr = originalList?.filter((ex) => {
+      return ex.selected === true;
+    });
+    selectedExercicesArr = selectedExercicesArr.map((ex) => {
+      return {
+        name: ex.name,
+        img: ex.img,
+        video: ex.video,
+        note: ex.note || "",
+        rep: ex.rep || 0,
+        set: ex.set || 0,
+        tempo: ex.tempo || 0,
+        chain: ex.chain || false,
+        type: ex.type || "",
+        rest: ex.rest || "",
+      };
+    });
+    console.log(selectedExercicesArr);
+  }, [originalList]);
+  // =========program name state =========
+  const [programName, setProgramName] = useState("...");
   // ===========assign program name sent by props tp submit btn  =========
   const assignProgramName = (name) => {
     setProgramName(name);
-    setFormsState((prev) => {
-      return [...prev, (prev[0].toggle = false)];
-    });
-  };
-
-  // ============open and close form function will be sent by props ==========
-
-  const toggleForm = (e) => {
-    let name = e.target.dataset.id;
-
-    setFormsState((prevState) => {
-      return prevState.map((form) => {
-        return form.name === name ? { ...form, toggle: !form.toggle } : form;
-      });
-    });
+    toggleProgramNameBox();
   };
 
   // ====================days custom hook  =====================
   const { daysArr, currentDay } = useDays();
 
+  // =================== render ==============
+
   return (
     <div className="all-pages-bg">
+      {(programNameBoxState || listContainerState) && (
+        <div className="overlay"></div>
+      )}
+      {/* =============page header ========= */}
       <PageHeader
         name={programName}
-        icon={<AiOutlineEdit data-id="program name" onClick={toggleForm} />}
+        icon={<AiOutlineEdit onClick={toggleProgramNameBox} />}
       />
 
+      {/* =========days container============ */}
       <div className="days-container">{daysArr}</div>
 
       {/* ==============create btns ================= */}
       <div className="create-btns">
-        <button className="full-btn">create workout</button>
+        <button className="full-btn" onClick={toggleListContainer}>
+          create workout
+        </button>
         <button className="outline-btn">set as rest day</button>
         {/* <button class="outline-btn">submit program</button> */}
       </div>
+
       {/* ================ program name box ================ */}
       <NameBox
-        name={formsState[0].name}
-        formState={formsState[0].toggle}
-        toggleForm={toggleForm}
+        name="program name"
+        boxState={programNameBoxState}
+        toggleBox={toggleProgramNameBox}
         assignName={assignProgramName}
       />
-      <ListContainer name="exercises" originalList={originalList} />
+
+      {/* =============original exercises list container ============= */}
+      <ListContainer
+        name="exercises"
+        originalList={originalList}
+        toggleList={toggleListContainer}
+        listState={listContainerState}
+        addExercises={addExercises}
+      />
     </div>
   );
 };

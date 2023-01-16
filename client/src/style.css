@@ -1123,11 +1123,11 @@ body {
 
 /* =======================list container ============= */
 .list-container {
-  width: 100vw;
-  height: 60vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   position: fixed;
-  margin-top: 60px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
@@ -1171,6 +1171,11 @@ body {
   width: 70vw;
   background-color: transparent;
   border: 1px solid var(--mediumGrey);
+  color: var(--mediumGrey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
 }
 
 .list-split-line {
@@ -1200,7 +1205,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
   width: 70vw;
   height: 40px;
   font-family: var(--fontSansSerif);
@@ -1215,9 +1219,7 @@ body {
   text-transform: capitalize;
   width: 50vw;
   text-align: start;
-
   word-wrap: break-word;
-
   height: 40px;
 }
 
@@ -1230,7 +1232,7 @@ body {
 .list-btn-container {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 70vw;
 }
 
