@@ -1,36 +1,31 @@
 import useInputs from "../../customHooks/inputsHook";
 import { PtContext } from "../../context/PtContext";
 import FormHeader from "../FormHeader";
-import clientsApi from "../../api/clientsApi";
+import { loginApi } from "../../api/authApis";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
+import { useMutation } from "react-query";
 
 // =================login form component ================
 
 const LoginForm = ({ formState, toggleForm }) => {
-  const { inputs, inputsValue, resetInputs, loginAlert } = useInputs("login");
+  // =======inputs values , hook and role with update user from store =====
+  const value = [
+    { name: "email", value: "", type: "text", alert: false },
+    { name: "password", value: "", type: "password", alert: false },
+  ];
+  const { inputs, inputsValue, resetInputs, loginAlert } = useInputs(value);
   const [role, setRole] = useState("coach");
   const { updateUser } = useContext(PtContext);
   const navigate = useNavigate();
 
-  // ===============login function ====================
-
-  const loginFunc = async () => {
-    const values = inputsValue.map((value) => {
-      return value.value;
-    });
-    const email = values[0];
-    const password = values[1];
-
-    try {
-      const { data } = await clientsApi.post(`auth/login`, {
-        email,
-        password,
-        role,
-      });
-
-      // ============setting first name and last name to update user in our context api
-
+  // ========== login func mutation ==========
+  const loginFuncMutation = useMutation(loginApi, {
+    onError: (error) => {
+      loginAlert();
+      console.log(error);
+    },
+    onSuccess: (data) => {
       let id = role === "coach" ? data.coach.coachId : data.client.clientId;
       let firstName =
         role === "coach"
@@ -45,10 +40,19 @@ const LoginForm = ({ formState, toggleForm }) => {
       updateUser(role, id, firstName, lastName);
       toggleForm();
       navigate(`/${role}`);
-    } catch (error) {
-      loginAlert();
-    }
+    },
+  });
+
+  // ===============login function ====================
+
+  const loginFunc = () => {
+    const email = inputsValue[0].value;
+    const password = inputsValue[1].value;
+
+    loginFuncMutation.mutate({ email, password, role });
   };
+
+  // ==================jsx  ======================
 
   return (
     <div>

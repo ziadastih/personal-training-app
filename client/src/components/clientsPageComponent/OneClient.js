@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "react-query";
-import { deleteClient } from "../../api/clientsApi";
-import clientsApi from "../../api/clientsApi";
+import axiosCall, { deleteClient } from "../../api/clientsApi";
 import { useContext } from "react";
 import { PtContext } from "../../context/PtContext";
 import DeleteVerification from "../DeleteVerification";
@@ -16,17 +15,21 @@ const OneClient = ({ name, id, date }) => {
 
   const { tools } = useTools("clients", id, toggleFunc);
 
-  // ===========delete client mutation on success invalidate query and update length ================
+  // ===========delete client mutation on success invalidate query and update length in try catch block to handle error  ================
 
   const deleteClientMutation = useMutation(deleteClient, {
     onSuccess: async () => {
       queryClient.invalidateQueries("clients");
       queryClient.invalidateQueries("searchedClient");
-      await clientsApi.patch("/dataLength", {
-        clientLength: dataLength[0].value - 1,
-      });
       toggleFunc();
-      decreaseData(0);
+      try {
+        await axiosCall.patch("/dataLength", {
+          clientLength: dataLength[0].value - 1,
+        });
+        decreaseData(0);
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 

@@ -1,18 +1,15 @@
-import { PtContext } from "../context/PtContext";
 import PageHeader from "../components/PageHeader";
-import clientsApi from "../api/clientsApi";
 import { BiDumbbell } from "react-icons/bi";
 import { BsFillBellFill } from "react-icons/bs";
-import { useContext, useEffect } from "react";
 import { GiMeal } from "react-icons/gi";
 import { HiUserGroup } from "react-icons/hi";
 import { RxActivityLog } from "react-icons/rx";
 import useNavigationTools from "../customHooks/navigationToolsHooks";
 
+import useCoachInfo from "../customHooks/coachInfoHook";
 // ================Component ===============
 
 const CoachHomePage = () => {
-  const { user, setOriginalData, dataLength } = useContext(PtContext);
   // ======== navigation tools hook and array to display what we need
   const value = [
     { name: "clients", icon: <HiUserGroup /> },
@@ -23,30 +20,9 @@ const CoachHomePage = () => {
 
   const { navigation } = useNavigationTools(value);
 
-  // ============get the dataLength and set it state ===================
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await clientsApi.get(`/dataLength`);
-        // ======if client is new we need to create a dataLength for him else we fetch the data and store it in context api
+  // =======coach info hook  ===================
 
-        if (data.dataLength.length === 0) {
-          const data = await clientsApi.post(`/dataLength`);
-          return data;
-        } else {
-          let workoutLength = data.dataLength[0].workoutLength;
-          let dietLength = data.dataLength[0].dietLength;
-          let clientLength = data.dataLength[0].clientLength;
-
-          setOriginalData(clientLength, workoutLength, dietLength);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { user, dataLength } = useCoachInfo();
 
   // ==================homepage html =====================
 

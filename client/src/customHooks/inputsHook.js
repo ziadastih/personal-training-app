@@ -1,48 +1,10 @@
-import { useState, useContext } from "react";
-import clientsApi, { createClient } from "../api/clientsApi";
-import { useMutation, useQueryClient } from "react-query";
+import { useState } from "react";
 import Input from "../components/Input";
-import { PtContext } from "../context/PtContext";
 
-// =============useInput custom Hook takes a value and a toggle function =================
+// =============useInput custom Hook take care of displaying inputs ,  updating values and validate inputs on submit error =================
 
-const useInputs = (value, func) => {
-  const [inputsValue, setInputsValue] = useState(
-    value === "register"
-      ? [
-          {
-            name: "first name",
-            value: "",
-            type: "text",
-            alert: false,
-          },
-          { name: "last name", value: "", type: "text", alert: false },
-          { name: "email", value: "", type: "text", alert: false },
-          { name: "number", value: "", type: "number", alert: false },
-          { name: "password", value: "", type: "password", alert: false },
-        ]
-      : value === "login"
-      ? [
-          { name: "email", value: "", type: "text", alert: false },
-          { name: "password", value: "", type: "password", alert: false },
-        ]
-      : value === "client"
-      ? [
-          {
-            name: "first name",
-            value: "",
-            type: "text",
-            alert: false,
-          },
-          { name: "last name", value: "", type: "text", alert: false },
-          { name: "email", value: "", type: "text", alert: false },
-          { name: "number", value: "", type: "number", alert: false },
-        ]
-      : value === "program name"
-      ? [{ name: "program name", value: "", type: "text", alert: false }]
-      : [{ name: "workout name", value: "", type: "text", alert: false }]
-  );
-  const { increaseData, dataLength } = useContext(PtContext);
+const useInputs = (value) => {
+  const [inputsValue, setInputsValue] = useState(value);
 
   // ===========activate alert depend on the validation  =========================
   const activateAlert = (name) => {
@@ -60,23 +22,7 @@ const useInputs = (value, func) => {
     return res.test(emailValue);
   };
 
-  const queryClient = useQueryClient();
-
-  const createClientMutation = useMutation(createClient, {
-    onSuccess: async () => {
-      queryClient.invalidateQueries("clients");
-      func();
-      await clientsApi.patch(
-        `/dataLength`,
-
-        { clientLength: dataLength[0].value + 1 }
-      );
-      increaseData(0);
-      resetInputs();
-    },
-  });
-
-  // ===========validate inputs and submit request to the api, depend on the inputs we have  =======================
+  // =====validate inputs  =======
 
   const validateInputs = async () => {
     const values = inputsValue.map((input) => {
@@ -89,49 +35,18 @@ const useInputs = (value, func) => {
     const number = values[3];
     // =========validating inputs in order =========
 
-    if (firstName.length < 3) return activateAlert("first name");
+    if (firstName.length < 3) activateAlert("first name");
 
-    if (lastName.length < 3) return activateAlert("last name");
+    if (lastName.length < 3) activateAlert("last name");
 
-    if (!validateEmail(email)) return activateAlert("email");
+    if (!validateEmail(email)) activateAlert("email");
 
-    if (number.length < 3) return activateAlert("number");
+    if (number.length < 3) activateAlert("number");
 
     // ======if there is a password we want to register a coach if not we want to register a client for a coach
-
     if (values.length > 4) {
       const password = values[4];
-      if (password.length < 6) return activateAlert("password");
-      try {
-        const data = await clientsApi.post(`/auth/register`, {
-          firstName,
-          lastName,
-          email,
-          number,
-          password,
-        });
-        resetInputs();
-        func();
-        return data;
-      } catch (error) {
-        console.log(error.msg);
-      }
-    } else {
-      let chars = `qwertyuiopasdfghjklzxcvbnmAQWERTYUIOPSDFGHJKLZXCVBNM1234567890!@#$%^&*()_+`;
-
-      let password = ``;
-      let lengthOfPass = 12;
-      for (let i = 0; i < lengthOfPass; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-
-      createClientMutation.mutate({
-        firstName,
-        lastName,
-        email,
-        password,
-        number,
-      });
+      if (password.length < 6) activateAlert("password");
     }
   };
 
@@ -163,7 +78,7 @@ const useInputs = (value, func) => {
     });
   };
   // =================map and display inputs depend on Input Component ====
-  const inputs = inputsValue.map((input) => {
+  const inputs = inputsValue?.map((input) => {
     return (
       <Input
         key={input.name}
