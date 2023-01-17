@@ -10,7 +10,7 @@ import useTools from "../../customHooks/toolsHook";
 
 const OneClient = ({ name, id, date }) => {
   const { toggleFunc, isToggled } = useToggle();
-  const { dataLength, decreaseData } = useContext(PtContext);
+  const { dataLength, decreaseDataLength } = useContext(PtContext);
   const queryClient = useQueryClient();
 
   const { tools } = useTools("clients", id, toggleFunc);
@@ -26,7 +26,7 @@ const OneClient = ({ name, id, date }) => {
         await axiosCall.patch("/dataLength", {
           clientLength: dataLength[0].value - 1,
         });
-        decreaseData(0);
+        decreaseDataLength(0);
       } catch (error) {
         console.log(error);
       }

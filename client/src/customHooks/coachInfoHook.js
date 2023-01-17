@@ -3,7 +3,7 @@ import { PtContext } from "../context/PtContext";
 import axiosCall from "../api/clientsApi";
 
 const useCoachInfo = () => {
-  const { setOriginalData, dataLength, user } = useContext(PtContext);
+  const { submitFetchedDataLength, dataLength, user } = useContext(PtContext);
 
   // ============get the dataLength and set it state ===================
   useEffect(() => {
@@ -20,7 +20,7 @@ const useCoachInfo = () => {
           let dietLength = data.dataLength[0].dietLength;
           let clientLength = data.dataLength[0].clientLength;
 
-          setOriginalData(clientLength, workoutLength, dietLength);
+          submitFetchedDataLength(clientLength, workoutLength, dietLength);
         }
       } catch (error) {
         console.log(error);

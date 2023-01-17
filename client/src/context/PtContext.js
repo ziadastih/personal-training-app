@@ -1,124 +1,20 @@
-import { createContext, useState, useEffect } from "react";
-
+import { createContext } from "react";
+import useDataLength from "../customHooks/dataLengthHook";
+import useUser from "../customHooks/userHook";
 const PtContext = createContext();
 
 const PtContextProvider = (props) => {
-  // ============= user state and dataLength state  =======================
+  // ============= user  and dataLength hooks =======================
 
-  const [user, setUser] = useState({
-    role: "",
-    id: "",
-    firstName: "",
-    lastName: "",
-  });
-  const [dataLength, setDataLength] = useState([
-    { value: 0 },
-    {
-      value: 0,
-    },
-    {
-      value: 0,
-    },
-  ]);
-  const [formState, setFormState] = useState(false);
+  const { user, resetUser, updateUser } = useUser();
 
-  const toggleForm = () => {
-    setFormState((prevState) => !prevState);
-  };
-
-  // ====================reset and update user functions===========
-
-  const resetUser = () => {
-    setUser({ role: "", id: "", firstName: "", lastName: "" });
-  };
-  const updateUser = (role, id, firstName, lastName) => {
-    return setUser({ role, id, firstName, lastName });
-  };
-
-  // ===============set user in local storage so we make sure we dont lose it when we want to refresh and we update the local storage whenever user change
-
-  useEffect(() => {
-    const localStorageUser = JSON.parse(localStorage.getItem("user"));
-
-    if (localStorageUser) {
-      updateUser(
-        localStorageUser.role,
-        localStorageUser.id,
-        localStorageUser.firstName,
-        localStorageUser.lastName
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    if (user.id.length > 0) {
-      return localStorage.setItem("user", JSON.stringify(user));
-    }
-  }, [user]);
-
-  // ======================update local storage whenever datalength change , and in case we refresh we keep the same data
-
-  useEffect(() => {
-    const dataInLocalS = JSON.parse(localStorage.getItem("dataLength"));
-    if (dataInLocalS) {
-      setOriginalData(
-        dataInLocalS[0].value,
-        dataInLocalS[1].value,
-        dataInLocalS[2].value
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("dataLength", JSON.stringify(dataLength));
-  }, [dataLength]);
-
-  // ===============set the datalength state when we fetch it first in coach homepage//
-
-  const setOriginalData = (clientLength, workoutLength, dietLength) => {
-    setDataLength([
-      {
-        value: clientLength,
-      },
-      {
-        value: workoutLength,
-      },
-      {
-        value: dietLength,
-      },
-    ]);
-  };
-
-  // ===================decrease anad increase  reset dataLength =================
-  const decreaseData = (i) => {
-    return setDataLength((prevState) => {
-      return prevState.map((obj, index) => {
-        return index === i ? { value: obj.value - 1 } : obj;
-      });
-    });
-  };
-
-  const increaseData = (i) => {
-    return setDataLength((prevState) => {
-      return prevState.map((obj, index) => {
-        return index === i ? { value: obj.value + 1 } : obj;
-      });
-    });
-  };
-
-  const resetData = () => {
-    setDataLength([
-      { value: 0 },
-      {
-        value: 0,
-      },
-      {
-        value: 0,
-      },
-    ]);
-  };
-
-  // ==================end of datalength ===============
+  const {
+    dataLength,
+    resetDataLength,
+    submitFetchedDataLength,
+    increaseDataLength,
+    decreaseDataLength,
+  } = useDataLength();
 
   return (
     <PtContext.Provider
@@ -126,13 +22,11 @@ const PtContextProvider = (props) => {
         user,
         updateUser,
         resetUser,
-        setOriginalData,
         dataLength,
-        resetData,
-        decreaseData,
-        increaseData,
-        toggleForm,
-        formState,
+        resetDataLength,
+        submitFetchedDataLength,
+        decreaseDataLength,
+        increaseDataLength,
       }}
     >
       {props.children}

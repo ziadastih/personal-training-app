@@ -12,7 +12,7 @@ import useTools from "../../customHooks/toolsHook";
 const OneDiet = React.forwardRef(({ diet }, ref) => {
   const { isToggled, toggleFunc } = useToggle();
   const { tools } = useTools("editDiet", diet._id, toggleFunc);
-  const { decreaseData, dataLength } = useContext(PtContext);
+  const { decreaseDataLength, dataLength } = useContext(PtContext);
 
   const queryClient = useQueryClient();
 
@@ -27,7 +27,7 @@ const OneDiet = React.forwardRef(({ diet }, ref) => {
         await axiosCall.patch("/dataLength", {
           dietLength: dataLength[2].value - 1,
         });
-        decreaseData(2);
+        decreaseDataLength(2);
       } catch (error) {
         console.log(error);
       }
@@ -39,7 +39,7 @@ const OneDiet = React.forwardRef(({ diet }, ref) => {
     deleteDietMutation.mutate(diet._id);
   };
 
-  // =================== render diet with ref if it is available=========================
+  //  ==========jsx  =============
 
   return (
     <div className="one-diet-container" ref={ref ?? ref}>

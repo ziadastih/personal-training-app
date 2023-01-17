@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { BsArrowsCollapse, BsArrowsExpand } from "react-icons/bs";
-import OneWorkout from "./OneWorkout";
 import useDays from "../../customHooks/DaysHook";
 import DeleteVerification from "../DeleteVerification";
 import { deleteProgram } from "../../api/workoutProgramsApi";
@@ -10,23 +9,25 @@ import useTools from "../../customHooks/toolsHook";
 import useToggle from "../../customHooks/toggleHook";
 import { PtContext } from "../../context/PtContext";
 import { BiLoaderCircle } from "react-icons/bi";
+import useWorkouts from "../../customHooks/WorkoutsHook";
 // ================OneProgram Component============================
 
 const OneProgram = React.forwardRef(({ program }, ref) => {
   // =======toggle  hooks ======================
-  const { toggleFunc, isToggled } = useToggle();
+  const { toggleFunc: toggleDeleteBox, isToggled } = useToggle();
   const { toggleFunc: toggleOverview, isToggled: overviewState } = useToggle();
 
   // =========tools =============
-  const { tools } = useTools("editProgram", program._id, toggleFunc);
+  const { tools } = useTools("editProgram", program._id, toggleDeleteBox);
   // ============days hook  ==============
 
   const { daysArr, currentDay } = useDays();
 
-  // =======workoutarr state =========
-  const [workoutsArr, setWorkoutsArr] = useState([]);
+  // =======workouts hook / context / query client =========
 
-  const { decreaseData, dataLength } = useContext(PtContext);
+  const { displayWorkouts } = useWorkouts(program, currentDay);
+
+  const { decreaseDataLength, dataLength } = useContext(PtContext);
 
   const queryClient = useQueryClient();
 
@@ -36,13 +37,13 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
     onSuccess: async () => {
       queryClient.invalidateQueries("workoutProgramsArr");
       queryClient.invalidateQueries("searchedPrograms");
-      toggleFunc();
+      toggleDeleteBox();
       try {
         await axiosCall.patch("/dataLength", {
           workoutLength: dataLength[1].value - 1,
         });
 
-        decreaseData(1);
+        decreaseDataLength(1);
       } catch (error) {
         console.log(error);
       }
@@ -53,17 +54,7 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
     deleteProgramMutation.mutate(program._id);
   };
 
-  // ================use effect to get the current workouts depend on the current day
-  useEffect(() => {
-    setWorkoutsArr(program.weeks[0].days[currentDay[0].index].workouts);
-  }, [currentDay]);
-
-  // ===========display the workouts =====================
-  const displayWorkouts = workoutsArr.map((workout, index) => {
-    return <OneWorkout key={index} workout={workout} />;
-  });
-
-  // ===========add border when overview is true ==================
+  // ===========css   add border when overview is true ==================
   const programBorder = overviewState
     ? "program-container border-bottom"
     : "program-container";
@@ -106,7 +97,7 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
           </div>
           <div className="days-container">{daysArr}</div>
           <div className="created-workouts">
-            {displayWorkouts.length === 0 ? (
+            {displayWorkouts?.length === 0 ? (
               <h2>No workouts available</h2>
             ) : (
               displayWorkouts
@@ -118,7 +109,7 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
       {isToggled && (
         <DeleteVerification
           name={program.name}
-          toggleBox={toggleFunc}
+          toggleBox={toggleDeleteBox}
           deleteFunc={deleteFunc}
         />
       )}

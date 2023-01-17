@@ -22,7 +22,7 @@ const RegisterClient = ({ formState, toggleForm }) => {
   const { inputs, validateInputs, resetInputs, inputsValue } =
     useInputs(registerInputs);
 
-  const { dataLength, increaseData } = useContext(PtContext);
+  const { dataLength, increaseDataLength } = useContext(PtContext);
 
   const { password } = useRandomPassword(formState);
 
@@ -45,13 +45,10 @@ const RegisterClient = ({ formState, toggleForm }) => {
 
           { clientLength: dataLength[0].value + 1 }
         );
-        increaseData(0);
+        increaseDataLength(0);
       } catch (error) {
         console.log(error);
       }
-    },
-    onError: (error) => {
-      console.log(error);
     },
   });
 
