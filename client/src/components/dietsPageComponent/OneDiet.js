@@ -3,7 +3,7 @@ import DeleteVerification from "../DeleteVerification";
 import { PtContext } from "../../context/PtContext";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteDiet } from "../../api/dietApi";
-import clientsApi from "../../api/clientsApi";
+import axiosCall from "../../api/clientsApi";
 import { BiLoaderCircle } from "react-icons/bi";
 import useToggle from "../../customHooks/toggleHook";
 import useTools from "../../customHooks/toolsHook";
@@ -22,11 +22,15 @@ const OneDiet = React.forwardRef(({ diet }, ref) => {
     onSuccess: async () => {
       queryClient.invalidateQueries("dietsProgram");
       queryClient.invalidateQueries("searchedDiets");
-      await clientsApi.patch("/dataLength", {
-        dietLength: dataLength[2].value - 1,
-      });
-      decreaseData(2);
       toggleFunc();
+      try {
+        await axiosCall.patch("/dataLength", {
+          dietLength: dataLength[2].value - 1,
+        });
+        decreaseData(2);
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
   // ===============delete function ====================

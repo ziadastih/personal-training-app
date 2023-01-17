@@ -4,7 +4,7 @@ import OneWorkout from "./OneWorkout";
 import useDays from "../../customHooks/DaysHook";
 import DeleteVerification from "../DeleteVerification";
 import { deleteProgram } from "../../api/workoutProgramsApi";
-import clientsApi from "../../api/clientsApi";
+import axiosCall from "../../api/clientsApi";
 import { useMutation, useQueryClient } from "react-query";
 import useTools from "../../customHooks/toolsHook";
 import useToggle from "../../customHooks/toggleHook";
@@ -36,12 +36,16 @@ const OneProgram = React.forwardRef(({ program }, ref) => {
     onSuccess: async () => {
       queryClient.invalidateQueries("workoutProgramsArr");
       queryClient.invalidateQueries("searchedPrograms");
-      await clientsApi.patch("/dataLength", {
-        workoutLength: dataLength[1].value - 1,
-      });
-
-      decreaseData(1);
       toggleFunc();
+      try {
+        await axiosCall.patch("/dataLength", {
+          workoutLength: dataLength[1].value - 1,
+        });
+
+        decreaseData(1);
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
