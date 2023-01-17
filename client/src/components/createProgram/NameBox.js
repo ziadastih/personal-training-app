@@ -1,7 +1,16 @@
 import useInputs from "../../customHooks/inputsHook";
 import FormHeader from "../FormHeader";
 const NameBox = ({ boxState, toggleBox, assignName, name }) => {
-  const { inputs, validateInput, inputsValue } = useInputs("program name");
+  const value = [
+    {
+      name: "program name",
+      value: "",
+      type: "text",
+      alert: false,
+    },
+  ];
+
+  const { inputs, inputsValue } = useInputs(value);
 
   return (
     <div

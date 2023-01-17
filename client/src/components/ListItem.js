@@ -3,7 +3,7 @@ import {
   MdOutlineCheckBox,
 } from "react-icons/md";
 
-const ListItem = ({ item, toggleBox, addExercises }) => {
+const ListItem = ({ item, addExercises }) => {
   const clickBox = () => {
     return addExercises(item);
   };

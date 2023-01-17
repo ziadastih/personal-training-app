@@ -1,11 +1,14 @@
 import PageHeader from "../components/PageHeader";
 import useDays from "../customHooks/DaysHook";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import NameBox from "../components/createProgram/NameBox";
 import exercisesList from "../fixedData,/exercisesList.json";
 import ListContainer from "../components/ListContainer";
 import useToggle from "../customHooks/toggleHook";
+import useProgramName from "../customHooks/nameHook";
+import useAddToList from "../customHooks/addToListHook";
+import useSelectedExercises from "../customHooks/selectedExercicesHook";
 // ============Page Component  ================
 const CreateProgramPage = () => {
   const [program, setProgram] = useState({
@@ -39,60 +42,24 @@ const CreateProgramPage = () => {
     ],
   });
 
-  const [selectedExercises, setSelectedExercises] = useState([]);
+  // ==program name hook
 
-  const addExercises = (exercise) => {
-    if (exercise.selected === true) {
-      setOriginalList((prevList) => {
-        return prevList.map((ex) => {
-          return ex.name === exercise.name ? { ...ex, selected: false } : ex;
-        });
-      });
-    } else {
-      setOriginalList((prevList) => {
-        return prevList.map((ex) => {
-          return ex.name === exercise.name ? { ...ex, selected: true } : ex;
-        });
-      });
-    }
-  };
+  const {
+    programName,
+    assignProgramName,
+    isToggled: programNameBoxState,
+    toggleFunc: toggleProgramNameBox,
+  } = useProgramName();
 
-  // ==============toggle functions ==================
-  const { isToggled: programNameBoxState, toggleFunc: toggleProgramNameBox } =
-    useToggle();
+  // ======add to list hook
+  const { addItem, originalList } = useAddToList(exercisesList);
+
+  // =======selected Exercises hook
+
+  const { selectedExercises } = useSelectedExercises(originalList);
 
   const { isToggled: listContainerState, toggleFunc: toggleListContainer } =
     useToggle();
-
-  //============= original exercises list state   =======
-  const [originalList, setOriginalList] = useState(exercisesList);
-  useEffect(() => {
-    let selectedExercicesArr = originalList?.filter((ex) => {
-      return ex.selected === true;
-    });
-    selectedExercicesArr = selectedExercicesArr.map((ex) => {
-      return {
-        name: ex.name,
-        img: ex.img,
-        video: ex.video,
-        note: ex.note || "",
-        rep: ex.rep || 0,
-        set: ex.set || 0,
-        tempo: ex.tempo || 0,
-        chain: ex.chain || false,
-        type: ex.type || "",
-        rest: ex.rest || "",
-      };
-    });
-    console.log(selectedExercicesArr);
-  }, [originalList]);
-  // =========program name state =========
-  const [programName, setProgramName] = useState("...");
-  // ===========assign program name sent by props tp submit btn  =========
-  const assignProgramName = (name) => {
-    setProgramName(name);
-    toggleProgramNameBox();
-  };
 
   // ====================days custom hook  =====================
   const { daysArr, currentDay } = useDays();
@@ -136,7 +103,7 @@ const CreateProgramPage = () => {
         originalList={originalList}
         toggleList={toggleListContainer}
         listState={listContainerState}
-        addExercises={addExercises}
+        addExercises={addItem}
       />
     </div>
   );
